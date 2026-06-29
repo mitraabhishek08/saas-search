@@ -19,23 +19,15 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ─── CSS ──────────────────────────────────────────────────────────────────────
-CSS = """
+# ─── Shared base (strip Streamlit chrome & wrappers) ──────────────────────────
+_BASE_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ── Background: dark navy blue gradient ─────────────────────── */
 html { height: 100%; }
-body {
-  min-height: 100vh;
-  font-family: 'Inter', sans-serif !important;
-  background: linear-gradient(135deg, #020b18 0%, #051e3e 45%, #0a2a52 100%) fixed !important;
-}
 
-/* ── Strip ALL Streamlit backgrounds — wildcard + explicit ───── */
-[data-testid] {
-  background-color: transparent !important;
-}
+/* ── Strip ALL Streamlit backgrounds ────────────────────────── */
+[data-testid] { background-color: transparent !important; }
 .stApp,
 .stApp > div,
 [data-testid="stAppViewContainer"],
@@ -54,27 +46,21 @@ div[data-testid="stColumn"],
   background-image: none !important;
 }
 
-/* ── Streamlit chrome ────────────────────────────────────────── */
+/* ── Hide Streamlit chrome ───────────────────────────────────── */
 #MainMenu, footer { visibility: hidden !important; }
 header[data-testid="stHeader"] { display: none !important; }
 section[data-testid="stSidebar"] { display: none !important; }
 .block-container { padding: 0 !important; max-width: 100% !important; }
 
-/* ── Base typography ─────────────────────────────────────────── */
+/* ── Fonts ───────────────────────────────────────────────────── */
 html, body, [class*="css"], p, span, label, div {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-  color: rgba(220,235,255,0.9);
 }
 
-/* ── Navbar ──────────────────────────────────────────────────── */
+/* ── Navbar column alignment (shared) ───────────────────────── */
 div[data-testid="stHorizontalBlock"]:first-of-type {
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  background: rgba(5,30,70,0.55) !important;
-  border-bottom: 1px solid rgba(56,165,248,0.18) !important;
-  padding: 0 2rem !important;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.35) !important;
   align-items: center !important;
+  padding: 0 2rem !important;
 }
 div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] {
   display: flex !important;
@@ -111,7 +97,50 @@ div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]
   align-items: center !important;
   height: 100% !important;
 }
-/* Logout icon button */
+
+/* ── Submit button — orange (always) ─────────────────────────── */
+div[data-testid="stFormSubmitButton"] button {
+  background: linear-gradient(135deg, #f97316, #ea580c) !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 2px 12px rgba(249,115,22,0.4) !important;
+  transition: all .2s !important;
+}
+div[data-testid="stFormSubmitButton"] button:hover {
+  box-shadow: 0 4px 20px rgba(249,115,22,0.65) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* ── Code blocks ─────────────────────────────────────────────── */
+.stCodeBlock { border-radius: 10px !important; }
+.stCodeBlock code { font-size: 11.5px !important; line-height: 1.6 !important; }
+
+/* ── Divider ─────────────────────────────────────────────────── */
+hr { border-color: #e2e8f0 !important; }
+</style>
+"""
+
+# ─── Dark theme (login page) ──────────────────────────────────────────────────
+DARK_CSS = _BASE_CSS + """
+<style>
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #020b18 0%, #051e3e 45%, #0a2a52 100%) fixed !important;
+}
+html, body, [class*="css"], p, span, label, div { color: rgba(220,235,255,0.9); }
+
+/* Navbar */
+div[data-testid="stHorizontalBlock"]:first-of-type {
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background: rgba(5,30,70,0.55) !important;
+  border-bottom: 1px solid rgba(56,165,248,0.18) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35) !important;
+}
+/* Logout button */
 div[data-testid="stHorizontalBlock"]:first-of-type
   > div[data-testid="stColumn"]:last-child
   div[data-testid="stButton"] > button {
@@ -121,8 +150,7 @@ div[data-testid="stHorizontalBlock"]:first-of-type
   border-radius: 50% !important;
   width: 34px !important; height: 34px !important;
   min-height: 34px !important; padding: 0 !important;
-  font-size: 15px !important;
-  backdrop-filter: blur(8px) !important;
+  font-size: 15px !important; backdrop-filter: blur(8px) !important;
   transition: all .2s !important;
 }
 div[data-testid="stHorizontalBlock"]:first-of-type
@@ -134,7 +162,7 @@ div[data-testid="stHorizontalBlock"]:first-of-type
   box-shadow: 0 0 16px rgba(56,165,248,0.35) !important;
 }
 
-/* ── Form (login card + search bar) ─────────────────────────── */
+/* Login form card */
 [data-testid="stForm"] {
   backdrop-filter: blur(20px) saturate(160%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
@@ -143,115 +171,161 @@ div[data-testid="stHorizontalBlock"]:first-of-type
   border-radius: 20px !important;
   box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(56,165,248,0.12) !important;
 }
-
-/* ── Inputs ──────────────────────────────────────────────────── */
 div[data-testid="stTextInput"] > label {
-  font-size: 0.78rem !important;
-  font-weight: 600 !important;
+  font-size: 0.78rem !important; font-weight: 600 !important;
   color: rgba(148,210,255,0.65) !important;
-  letter-spacing: 0.3px !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0.3px !important; text-transform: uppercase !important;
 }
 div[data-testid="stTextInput"] input {
   background: rgba(5,25,65,0.6) !important;
   border: 1px solid rgba(56,165,248,0.25) !important;
   border-radius: 10px !important;
   color: rgba(220,235,255,0.95) !important;
-  font-size: 0.9rem !important;
-  transition: all .2s !important;
+  font-size: 0.9rem !important; transition: all .2s !important;
 }
-div[data-testid="stTextInput"] input::placeholder {
-  color: rgba(148,210,255,0.28) !important;
-}
+div[data-testid="stTextInput"] input::placeholder { color: rgba(148,210,255,0.28) !important; }
 div[data-testid="stTextInput"] input:focus {
   background: rgba(5,25,65,0.8) !important;
   border-color: rgba(56,165,248,0.65) !important;
   box-shadow: 0 0 0 3px rgba(56,165,248,0.15) !important;
   outline: none !important;
 }
-
-/* ── Buttons ─────────────────────────────────────────────────── */
-div[data-testid="stFormSubmitButton"] button {
-  background: linear-gradient(135deg, #f97316, #ea580c) !important;
-  border: none !important;
-  color: #fff !important;
-  border-radius: 10px !important;
-  font-weight: 600 !important;
-  font-size: 0.9rem !important;
-  box-shadow: 0 0 22px rgba(249,115,22,0.45) !important;
-  transition: all .2s !important;
-}
-div[data-testid="stFormSubmitButton"] button:hover {
-  box-shadow: 0 0 36px rgba(249,115,22,0.7) !important;
-  transform: translateY(-1px) !important;
-}
-div[data-testid="stButton"] > button {
-  background: rgba(56,165,248,0.1) !important;
-  border: 1px solid rgba(56,165,248,0.25) !important;
-  color: rgba(148,210,255,0.9) !important;
-  border-radius: 10px !important;
-  font-weight: 500 !important;
-  font-size: 0.87rem !important;
-  backdrop-filter: blur(8px) !important;
-  transition: all .2s !important;
-}
-div[data-testid="stButton"] > button:hover {
-  background: rgba(56,165,248,0.22) !important;
-  border-color: rgba(56,165,248,0.5) !important;
-  color: #7dd3fc !important;
-  box-shadow: 0 0 16px rgba(56,165,248,0.25) !important;
-}
-
-/* ── Expanders (API debug) ───────────────────────────────────── */
-div[data-testid="stExpander"] {
-  backdrop-filter: blur(12px) !important;
-  background: rgba(5,20,50,0.45) !important;
-  border: 1px solid rgba(56,165,248,0.15) !important;
-  border-radius: 12px !important;
-  margin-bottom: 8px !important;
-  overflow: hidden !important;
-}
-div[data-testid="stExpander"] > details > summary {
-  font-size: 0.85rem !important;
-  font-weight: 500 !important;
-  padding: 0.7rem 1rem !important;
-  color: rgba(148,210,255,0.85) !important;
-}
-div[data-testid="stExpander"] > details > summary:hover {
-  background: rgba(56,165,248,0.07) !important;
-}
-
-/* ── Dataframe ───────────────────────────────────────────────── */
-div[data-testid="stDataFrame"] {
-  background: rgba(5,20,50,0.35) !important;
-  border-radius: 12px !important;
-  border: 1px solid rgba(56,165,248,0.14) !important;
-  overflow: hidden !important;
-}
-
-/* ── Code blocks ─────────────────────────────────────────────── */
-.stCodeBlock { border-radius: 10px !important; }
-.stCodeBlock code { font-size: 11.5px !important; line-height: 1.6 !important; }
-
-/* ── Alerts ──────────────────────────────────────────────────── */
 div[data-testid="stAlert"] {
   background: rgba(5,20,50,0.45) !important;
-  border-radius: 10px !important;
   border: 1px solid rgba(56,165,248,0.18) !important;
+  border-radius: 10px !important;
   backdrop-filter: blur(8px) !important;
   color: rgba(220,235,255,0.9) !important;
 }
+</style>
+"""
 
-/* ── Caption / small text ────────────────────────────────────── */
-div[data-testid="stCaptionContainer"] p {
-  color: rgba(148,210,255,0.45) !important;
+# ─── Light theme (search page) ────────────────────────────────────────────────
+LIGHT_CSS = _BASE_CSS + """
+<style>
+body {
+  min-height: 100vh;
+  background: #f1f5f9 !important;
+  background-image: none !important;
+}
+html, body, [class*="css"], p, span, label, div { color: #1e293b; }
+
+/* Navbar */
+div[data-testid="stHorizontalBlock"]:first-of-type {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.07) !important;
+}
+/* Logout button */
+div[data-testid="stHorizontalBlock"]:first-of-type
+  > div[data-testid="stColumn"]:last-child
+  div[data-testid="stButton"] > button {
+  background: #f1f5f9 !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+  border-radius: 50% !important;
+  width: 34px !important; height: 34px !important;
+  min-height: 34px !important; padding: 0 !important;
+  font-size: 15px !important;
+  transition: all .2s !important;
+}
+div[data-testid="stHorizontalBlock"]:first-of-type
+  > div[data-testid="stColumn"]:last-child
+  div[data-testid="stButton"] > button:hover {
+  background: #e2e8f0 !important;
+  color: #334155 !important;
 }
 
-/* ── Spinner ─────────────────────────────────────────────────── */
-div[data-testid="stSpinner"] p { color: rgba(148,210,255,0.6) !important; }
+/* Search form — no outer box */
+[data-testid="stForm"] {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0 !important;
+}
+/* Inputs */
+div[data-testid="stTextInput"] > label {
+  font-size: 0.78rem !important; font-weight: 600 !important;
+  color: #64748b !important;
+  letter-spacing: 0.3px !important; text-transform: uppercase !important;
+}
+div[data-testid="stTextInput"] input {
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  color: #1e293b !important;
+  font-size: 0.9rem !important; transition: all .2s !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+}
+div[data-testid="stTextInput"] input::placeholder { color: #94a3b8 !important; }
+div[data-testid="stTextInput"] input:focus {
+  background: #ffffff !important;
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.12) !important;
+  outline: none !important;
+}
 
-/* ── Divider ─────────────────────────────────────────────────── */
-hr { border-color: rgba(56,165,248,0.12) !important; }
+/* Regular buttons */
+div[data-testid="stButton"] > button {
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #334155 !important;
+  border-radius: 10px !important;
+  font-weight: 500 !important; font-size: 0.87rem !important;
+  transition: all .2s !important;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+}
+div[data-testid="stButton"] > button:hover {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Expanders */
+div[data-testid="stExpander"] {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  margin-bottom: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+div[data-testid="stExpander"] > details > summary {
+  font-size: 0.85rem !important; font-weight: 500 !important;
+  padding: 0.7rem 1rem !important; color: #334155 !important;
+}
+div[data-testid="stExpander"] > details > summary:hover {
+  background: #f8fafc !important;
+}
+
+/* Dataframe */
+div[data-testid="stDataFrame"] {
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+}
+
+/* Alerts */
+div[data-testid="stAlert"] {
+  background: #ffffff !important;
+  border-radius: 10px !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #1e293b !important;
+}
+
+/* Caption */
+div[data-testid="stCaptionContainer"] p { color: #94a3b8 !important; }
+
+/* Spinner */
+div[data-testid="stSpinner"] p { color: #64748b !important; }
+
+/* Divider */
+hr { border-color: #e2e8f0 !important; }
 </style>
 """
 
@@ -347,25 +421,34 @@ def _extract_records(data):
 
 # ─── Components ───────────────────────────────────────────────────────────────
 
-def render_navbar():
+def render_navbar(theme="dark"):
     brand_col, _, user_col, logout_col = st.columns([3, 4, 1.5, 0.25])
+
+    if theme == "light":
+        brand_color  = "#0f172a"
+        badge_style  = ("background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.28);"
+                        "border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:600;color:#1d4ed8;")
+        chip_style   = ("background:#f1f5f9;border:1px solid #e2e8f0;border-radius:20px;"
+                        "padding:5px 14px;font-size:.82rem;font-weight:500;color:#334155;white-space:nowrap;")
+    else:
+        brand_color  = "rgba(220,235,255,.95)"
+        badge_style  = ("background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.35);"
+                        "border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:600;color:#7dd3fc;")
+        chip_style   = ("background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.28);"
+                        "border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:500;"
+                        "color:rgba(148,210,255,.9);white-space:nowrap;backdrop-filter:blur(8px);")
+
     with brand_col:
-        st.markdown("""
+        st.markdown(f"""
         <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:.97rem;font-weight:700;color:rgba(220,235,255,.95);
-                       letter-spacing:-.3px;">MDM Search</span>
-          <span style="background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.35);
-                       border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:600;
-                       color:#7dd3fc;">Informatica C360</span>
+          <span style="font-size:.97rem;font-weight:700;color:{brand_color};letter-spacing:-.3px;">MDM Search</span>
+          <span style="{badge_style}">Informatica C360</span>
         </div>
         """, unsafe_allow_html=True)
     with user_col:
         st.markdown(f"""
         <div style="display:flex;justify-content:flex-end;">
-          <span style="background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.28);
-                       border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:500;
-                       color:rgba(148,210,255,.9);white-space:nowrap;
-                       backdrop-filter:blur(8px);">{st.session_state.username}</span>
+          <span style="{chip_style}">{st.session_state.username}</span>
         </div>
         """, unsafe_allow_html=True)
     with logout_col:
@@ -373,17 +456,16 @@ def render_navbar():
             _do_logout()
 
 
-def render_api_pane():
-    st.markdown("""
+def render_api_pane(theme="dark"):
+    label_color = "#64748b" if theme == "light" else "rgba(255,255,255,.4)"
+    st.markdown(f"""
     <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
-              color:rgba(255,255,255,.4);margin:0 0 .75rem;">API Debug</p>
+              color:{label_color};margin:0 0 .75rem;">API Debug</p>
     """, unsafe_allow_html=True)
     if not st.session_state.api_logs:
         st.caption("No API calls yet.")
         return
     for i, log in enumerate(st.session_state.api_logs):
-        ok    = isinstance(log["status"], int) and log["status"] < 400
-        color = "#4ade80" if ok else "#f87171"
         label = f"{log['ts']}  ·  {log['method']} /{log['url'].rsplit('/',1)[-1]}  ·  {log['status']}"
         with st.expander(label, expanded=(i == 0)):
             st.markdown("**URL**")
@@ -395,18 +477,25 @@ def render_api_pane():
             st.code(resp_str, language="json")
 
 
-def render_results(data):
+def render_results(data, theme="dark"):
     import pandas as pd
 
     records, total = _extract_records(data)
 
+    if theme == "light":
+        label_color  = "#64748b"
+        badge_style  = ("background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.28);"
+                        "border-radius:20px;padding:2px 10px;font-size:.78rem;font-weight:700;color:#1d4ed8;")
+    else:
+        label_color  = "rgba(148,210,255,.5)"
+        badge_style  = ("background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.3);"
+                        "border-radius:20px;padding:2px 10px;font-size:.78rem;font-weight:700;color:#7dd3fc;")
+
     st.markdown(f"""
     <div style="display:flex;align-items:center;gap:10px;margin:2rem 0 .75rem;">
       <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
-                   color:rgba(148,210,255,.5);">Organizations</span>
-      <span style="background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.3);
-                   border-radius:20px;padding:2px 10px;font-size:.78rem;font-weight:700;
-                   color:#7dd3fc;">{total} found</span>
+                   color:{label_color};">Organizations</span>
+      <span style="{badge_style}">{total} found</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -450,19 +539,21 @@ def render_results(data):
         .set_properties(**{"font-size": "13px", "color": "#1e293b"})
         .set_table_styles([
             {"selector": "th", "props": [
-                ("background", "#0f2a4a"),
-                ("color", "#7dd3fc"),
+                ("background", "#1e3a5f"),
+                ("color", "#93c5fd"),
                 ("font-weight", "700"),
                 ("font-size", "11px"),
                 ("text-transform", "uppercase"),
                 ("letter-spacing", "0.5px"),
-                ("border-bottom", "1px solid #1e4a78"),
+                ("border-bottom", "1px solid #2d5a8e"),
+                ("padding", "10px 12px"),
             ]},
             {"selector": "td", "props": [
-                ("border-bottom", "1px solid #e2e8f0"),
+                ("border-bottom", "1px solid #f1f5f9"),
                 ("color", "#1e293b"),
+                ("padding", "10px 12px"),
             ]},
-            {"selector": "tr:hover td", "props": [("background", "#f0f7ff")]},
+            {"selector": "tr:hover td", "props": [("background", "#f8faff")]},
         ])
     )
     st.dataframe(styled, use_container_width=True, hide_index=True)
@@ -470,7 +561,7 @@ def render_results(data):
 # ─── Pages ────────────────────────────────────────────────────────────────────
 
 def page_login():
-    st.markdown(CSS, unsafe_allow_html=True)
+    st.markdown(DARK_CSS, unsafe_allow_html=True)
 
     _, center, _ = st.columns([1, 1.1, 1])
     with center:
@@ -508,25 +599,12 @@ def page_login():
 
         if st.session_state.api_logs:
             st.divider()
-            render_api_pane()
+            render_api_pane(theme="dark")
 
 
 def page_search():
-    st.markdown(CSS, unsafe_allow_html=True)
-    # Strip the glass card from the search form — keep it for login only
-    st.markdown("""
-    <style>
-    [data-testid="stForm"] {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      backdrop-filter: none !important;
-      -webkit-backdrop-filter: none !important;
-      padding: 0 !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    render_navbar()
+    st.markdown(LIGHT_CSS, unsafe_allow_html=True)
+    render_navbar(theme="light")
 
     st.markdown("<div style='padding:2rem 2.5rem 2rem;'>", unsafe_allow_html=True)
 
@@ -553,7 +631,7 @@ def page_search():
             st.session_state.search_results = data
 
     if st.session_state.search_results is not None:
-        render_results(st.session_state.search_results)
+        render_results(st.session_state.search_results, theme="light")
 
         st.markdown("<div style='margin-top:2rem;'>", unsafe_allow_html=True)
         api_label = "Hide API Response" if st.session_state.show_api_pane else "Show API Response"
@@ -563,7 +641,7 @@ def page_search():
 
         if st.session_state.show_api_pane:
             st.markdown("<div style='margin-top:1rem;'>", unsafe_allow_html=True)
-            render_api_pane()
+            render_api_pane(theme="light")
             st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("</div>", unsafe_allow_html=True)
