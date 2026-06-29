@@ -36,7 +36,6 @@ GLOBAL_CSS = """
   --muted:        #78716c;
   --border:       #e7e5e4;
   --shadow-sm:    0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-  --shadow-md:    0 4px 16px rgba(0,0,0,.08);
   --radius:       10px;
   --success-bg:   #dcfce7;
   --success-fg:   #15803d;
@@ -49,49 +48,52 @@ GLOBAL_CSS = """
 header[data-testid="stHeader"] { display: none !important; }
 section[data-testid="stSidebar"] { display: none !important; }
 .block-container { padding: 0 !important; max-width: 100% !important; }
-
-/* ── Base font ────────────────────────────────────────────────── */
 html, body, [class*="css"] {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
-
-/* ── App background ───────────────────────────────────────────── */
 .stApp { background: var(--bg) !important; }
 
-/* ── Navbar row ───────────────────────────────────────────────── */
-div[data-testid="stMainBlockContainer"] > div > div > div[data-testid="stVerticalBlock"]
-  > div[data-testid="stHorizontalBlock"]:first-child {
+/* ── Navbar: first horizontal block on the page ───────────────── */
+div[data-testid="stHorizontalBlock"]:first-of-type {
   background: var(--surface) !important;
   border-bottom: 1px solid var(--border) !important;
   padding: 0 2rem !important;
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 999 !important;
   box-shadow: 0 1px 4px rgba(0,0,0,.05) !important;
 }
-div[data-testid="stMainBlockContainer"] > div > div > div[data-testid="stVerticalBlock"]
-  > div[data-testid="stHorizontalBlock"]:first-child > div[data-testid="stColumn"] {
-  padding: 0 !important;
+div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 56px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
-
-/* ── Navbar logout button ─────────────────────────────────────── */
-.nav-logout div[data-testid="stButton"] > button {
+div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] > div {
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  width: 100% !important;
+}
+/* Logout icon button — last column of navbar */
+div[data-testid="stHorizontalBlock"]:first-of-type
+  > div[data-testid="stColumn"]:last-child
+  div[data-testid="stButton"] > button {
   background: transparent !important;
   border: 1.5px solid var(--border) !important;
   color: var(--muted) !important;
   border-radius: 50% !important;
-  width: 34px !important;
-  height: 34px !important;
-  min-height: 34px !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-height: 32px !important;
   padding: 0 !important;
   font-size: 15px !important;
-  line-height: 1 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   transition: all .15s !important;
 }
-.nav-logout div[data-testid="stButton"] > button:hover {
+div[data-testid="stHorizontalBlock"]:first-of-type
+  > div[data-testid="stColumn"]:last-child
+  div[data-testid="stButton"] > button:hover {
   border-color: var(--orange) !important;
   color: var(--orange) !important;
   background: var(--orange-lt) !important;
@@ -102,7 +104,6 @@ div[data-testid="stTextInput"] > label {
   font-size: 0.8rem !important;
   font-weight: 600 !important;
   color: var(--text) !important;
-  letter-spacing: 0.1px !important;
 }
 div[data-testid="stTextInput"] input {
   border-radius: 8px !important;
@@ -118,9 +119,8 @@ div[data-testid="stTextInput"] input:focus {
 }
 div[data-testid="stTextInput"] input::placeholder { color: #a8a29e !important; }
 
-/* ── Buttons (primary) ────────────────────────────────────────── */
-div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"],
-div[data-testid="stFormSubmitButton"] > button[kind="primary"] {
+/* ── Primary submit button (Search / Sign in) ─────────────────── */
+div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
   background: var(--orange) !important;
   border-color: var(--orange) !important;
   color: #fff !important;
@@ -129,26 +129,17 @@ div[data-testid="stFormSubmitButton"] > button[kind="primary"] {
   font-size: 0.87rem !important;
   transition: all .15s !important;
 }
-div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover,
-div[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover {
+div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover {
   background: var(--orange-dark) !important;
-  border-color: var(--orange-dark) !important;
   box-shadow: 0 4px 14px rgba(249,115,22,.35) !important;
   transform: translateY(-1px) !important;
 }
-/* Secondary submit buttons */
-div[data-testid="stFormSubmitButton"] > button[kind="secondaryFormSubmit"] {
+/* Regular Streamlit buttons (Show API / Hide API toggle) */
+div[data-testid="stButton"] > button {
   border-radius: 8px !important;
   font-weight: 500 !important;
-  font-size: 0.87rem !important;
-  color: var(--text) !important;
-  border-color: var(--border) !important;
+  font-size: 0.85rem !important;
   transition: all .15s !important;
-}
-div[data-testid="stFormSubmitButton"] > button[kind="secondaryFormSubmit"]:hover {
-  border-color: var(--orange) !important;
-  color: var(--orange) !important;
-  background: var(--orange-lt) !important;
 }
 
 /* ── Expanders ────────────────────────────────────────────────── */
@@ -166,25 +157,17 @@ div[data-testid="stExpander"] > details > summary {
   padding: 0.7rem 1rem !important;
   color: var(--text) !important;
 }
-div[data-testid="stExpander"] > details > summary:hover {
-  background: var(--bg) !important;
-}
+div[data-testid="stExpander"] > details > summary:hover { background: var(--bg) !important; }
 
 /* ── Code blocks ──────────────────────────────────────────────── */
 .stCodeBlock { border-radius: 8px !important; }
 .stCodeBlock code { font-size: 11.5px !important; line-height: 1.6 !important; }
 
 /* ── Alerts ───────────────────────────────────────────────────── */
-div[data-testid="stAlert"] {
-  border-radius: 8px !important;
-  font-size: 0.88rem !important;
-}
+div[data-testid="stAlert"] { border-radius: 8px !important; font-size: 0.88rem !important; }
 
 /* ── Dataframe ────────────────────────────────────────────────── */
-div[data-testid="stDataFrame"] {
-  border-radius: var(--radius) !important;
-  overflow: hidden !important;
-}
+div[data-testid="stDataFrame"] { border-radius: var(--radius) !important; overflow: hidden !important; }
 
 /* ── Dividers ─────────────────────────────────────────────────── */
 hr { border-color: var(--border) !important; margin: 1rem 0 !important; }
@@ -301,7 +284,6 @@ def mdm_search(query: str, session_id: str, base_api_url: str):
         _log("POST", url, payload, "ERR", str(e))
         return None, str(e)
 
-# ─── Helpers ──────────────────────────────────────────────────────────────────
 
 def _do_logout():
     for k, v in _DEFAULTS.items():
@@ -325,11 +307,11 @@ def _extract_records(data):
 # ─── Components ───────────────────────────────────────────────────────────────
 
 def render_navbar() -> None:
-    brand_col, spacer_col, user_col, logout_col = st.columns([3, 4, 1.4, 0.3])
+    brand_col, _, user_col, logout_col = st.columns([3, 4, 1.5, 0.25])
 
     with brand_col:
         st.markdown("""
-        <div style="display:flex;align-items:center;gap:10px;height:52px;padding-left:0.5rem;">
+        <div style="display:flex;align-items:center;gap:10px;">
           <span style="font-size:.97rem;font-weight:700;color:#1c1917;letter-spacing:-.3px;">
             MDM Search
           </span>
@@ -340,37 +322,26 @@ def render_navbar() -> None:
         </div>
         """, unsafe_allow_html=True)
 
-    with spacer_col:
-        st.markdown('<div style="height:52px;"></div>', unsafe_allow_html=True)
-
     with user_col:
         st.markdown(f"""
-        <div style="display:flex;align-items:center;justify-content:flex-end;
-                    height:52px;gap:8px;padding-right:0.25rem;">
+        <div style="display:flex;justify-content:flex-end;">
           <span style="
             background:#f8f7f5;border:1px solid #e7e5e4;border-radius:20px;
             padding:5px 14px;font-size:.82rem;font-weight:500;color:#1c1917;
-            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
           ">{st.session_state.username}</span>
         </div>
         """, unsafe_allow_html=True)
 
     with logout_col:
-        st.markdown("""
-        <div style="display:flex;align-items:center;justify-content:flex-end;
-                    height:52px;padding-right:0.75rem;">
-        """, unsafe_allow_html=True)
-        st.markdown('<div class="nav-logout">', unsafe_allow_html=True)
         if st.button("⏻", key="logout_nav", help="Sign out"):
             _do_logout()
-        st.markdown("</div>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_api_pane() -> None:
     st.markdown("""
     <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;
-              letter-spacing:.7px;color:#a8a29e;margin:0 0 .6rem 0;">
+              letter-spacing:.7px;color:#a8a29e;margin:0 0 .75rem 0;">
       API Debug
     </p>""", unsafe_allow_html=True)
 
@@ -380,11 +351,8 @@ def render_api_pane() -> None:
 
     for i, log in enumerate(st.session_state.api_logs):
         ok    = isinstance(log["status"], int) and log["status"] < 400
-        color = "#15803d" if ok else "#b91c1c"
-        bg    = "#dcfce7" if ok else "#fee2e2"
         path  = log["url"].rsplit("/", 1)[-1]
         label = f"{log['ts']}  ·  {log['method']} /{path}  ·  {log['status']}"
-
         with st.expander(label, expanded=(i == 0)):
             st.markdown("**URL**")
             st.code(f"{log['method']} {log['url']}", language="http")
@@ -405,7 +373,7 @@ def render_results(data) -> None:
     records, total = _extract_records(data)
 
     st.markdown(f"""
-    <div style="display:flex;align-items:center;gap:10px;margin:1.25rem 0 0.75rem;">
+    <div style="display:flex;align-items:center;gap:10px;margin:2rem 0 0.75rem;">
       <span style="font-size:.75rem;font-weight:700;text-transform:uppercase;
                    letter-spacing:.5px;color:#78716c;">Organizations</span>
       <span style="
@@ -473,30 +441,6 @@ def render_results(data) -> None:
 
     st.dataframe(styled, use_container_width=True, hide_index=True)
 
-    # ── Record details ────────────────────────────────────────────────────────
-    st.markdown("""
-    <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;
-              letter-spacing:.5px;color:#a8a29e;margin:1.5rem 0 .5rem;">
-      Record Details
-    </p>""", unsafe_allow_html=True)
-
-    for rec in records:
-        meta   = rec.get("_meta") or {}
-        name   = rec.get("c360organization.name") or meta.get("businessId") or "—"
-        biz_id = meta.get("businessId") or "—"
-        status = meta.get("status", "")
-        is_ok  = status == "ACTIVE"
-        with st.expander(f"{name}   ·   {biz_id}"):
-            if status:
-                st.markdown(
-                    f'<span style="background:{"#dcfce7" if is_ok else "#fee2e2"};'
-                    f'color:{"#15803d" if is_ok else "#b91c1c"};'
-                    f'border-radius:20px;padding:2px 10px;'
-                    f'font-size:.75rem;font-weight:700;">{status}</span>',
-                    unsafe_allow_html=True,
-                )
-            st.json(rec)
-
 # ─── Pages ────────────────────────────────────────────────────────────────────
 
 def page_login() -> None:
@@ -538,16 +482,14 @@ def page_login() -> None:
 
 def page_search() -> None:
     st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
-
-    # ── Navbar ────────────────────────────────────────────────────────────────
     render_navbar()
 
-    # ── Content ───────────────────────────────────────────────────────────────
-    st.markdown("<div style='padding:2rem 2.5rem 0;'>", unsafe_allow_html=True)
+    # ── Content area ──────────────────────────────────────────────────────────
+    st.markdown("<div style='padding:2rem 2.5rem 2rem;'>", unsafe_allow_html=True)
 
     # ── Search form ───────────────────────────────────────────────────────────
     with st.form("search_form", clear_on_submit=False):
-        q_col, search_btn, api_btn = st.columns([7, 0.9, 0.9])
+        q_col, btn_col = st.columns([8, 1])
         with q_col:
             query = st.text_input(
                 "query",
@@ -555,17 +497,8 @@ def page_search() -> None:
                 placeholder="Search organizations — e.g. Walt Disney",
                 label_visibility="collapsed",
             )
-        with search_btn:
+        with btn_col:
             search_clicked = st.form_submit_button("Search", use_container_width=True)
-        with api_btn:
-            toggle_clicked = st.form_submit_button(
-                "Hide API" if st.session_state.show_api_pane else "Show API",
-                use_container_width=True,
-            )
-
-    if toggle_clicked:
-        st.session_state.show_api_pane = not st.session_state.show_api_pane
-        st.rerun()
 
     if search_clicked and query:
         st.session_state.search_query = query
@@ -577,19 +510,24 @@ def page_search() -> None:
         else:
             st.session_state.search_results = data
 
-    # ── Body ──────────────────────────────────────────────────────────────────
-    if st.session_state.show_api_pane:
-        left, right = st.columns([3, 2], gap="large")
-        with left:
-            if st.session_state.search_results is not None:
-                render_results(st.session_state.search_results)
-        with right:
-            st.markdown("<div style='margin-top:1.25rem;'>", unsafe_allow_html=True)
+    # ── Results table ─────────────────────────────────────────────────────────
+    if st.session_state.search_results is not None:
+        render_results(st.session_state.search_results)
+
+        # ── API toggle + pane (below table) ───────────────────────────────────
+        st.markdown("<div style='margin-top:2rem;'>", unsafe_allow_html=True)
+
+        api_label = "Hide API Response" if st.session_state.show_api_pane else "Show API Response"
+        if st.button(api_label, key="toggle_api"):
+            st.session_state.show_api_pane = not st.session_state.show_api_pane
+            st.rerun()
+
+        if st.session_state.show_api_pane:
+            st.markdown("<div style='margin-top:1rem;'>", unsafe_allow_html=True)
             render_api_pane()
             st.markdown("</div>", unsafe_allow_html=True)
-    else:
-        if st.session_state.search_results is not None:
-            render_results(st.session_state.search_results)
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
