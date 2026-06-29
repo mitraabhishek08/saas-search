@@ -90,12 +90,21 @@ div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]
 }
 [data-testid="stForm"] div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] > div {
   width: 100% !important;
+  min-width: 0 !important;
   margin-bottom: 0 !important;
 }
 [data-testid="stForm"] div[data-testid="stFormSubmitButton"] {
   display: flex !important;
   align-items: center !important;
   height: 100% !important;
+}
+/* Force text input to fill its column at every nesting level */
+[data-testid="stForm"] div[data-testid="stColumn"] div[data-testid="stTextInput"],
+[data-testid="stForm"] div[data-testid="stColumn"] div[data-testid="stTextInput"] > div,
+[data-testid="stForm"] div[data-testid="stColumn"] div[data-testid="stTextInput"] > div > div,
+[data-testid="stForm"] div[data-testid="stColumn"] div[data-testid="stTextInput"] input {
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 /* ── Submit button — orange (always) ─────────────────────────── */
