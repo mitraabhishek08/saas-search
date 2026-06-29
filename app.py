@@ -51,7 +51,8 @@ section[data-testid="stSidebar"] { display: none !important; }
 html, body, [class*="css"] {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
-.stApp { background: var(--bg) !important; }
+body  { background: var(--bg) !important; }
+.stApp { background: transparent !important; }
 
 /* ── Navbar: first horizontal block on the page ───────────────── */
 div[data-testid="stHorizontalBlock"]:first-of-type {
@@ -176,20 +177,27 @@ hr { border-color: var(--border) !important; margin: 1rem 0 !important; }
 
 LOGIN_CSS = """
 <style>
-.stApp {
-  background: linear-gradient(145deg, #1c0a00 0%, #7c2d12 45%, #431407 100%) !important;
+/* Gradient lives on body — nothing can sit above it */
+body {
+  background: linear-gradient(145deg, #1c0a00 0%, #7c2d12 45%, #431407 100%) fixed !important;
 }
-/* Strip white backgrounds off every Streamlit wrapper so gradient shows through */
+/* Every Streamlit wrapper must be transparent */
+.stApp,
+.stApp > div,
 [data-testid="stAppViewContainer"],
-[data-testid="stMainBlockContainer"],
 [data-testid="stAppViewBlockContainer"],
+[data-testid="stMainBlockContainer"],
+[data-testid="stMainBlockContainer"] > div,
 [data-testid="stVerticalBlock"],
 div[data-testid="stColumn"],
-.main, .main > div, section.main {
+section.main,
+div.main,
+.main > div {
   background: transparent !important;
+  background-color: transparent !important;
 }
 [data-testid="stForm"] {
-  background: white !important;
+  background: #ffffff !important;
   border-radius: 16px !important;
   padding: 2.25rem 2.5rem !important;
   box-shadow: 0 32px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06) !important;
