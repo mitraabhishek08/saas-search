@@ -487,6 +487,19 @@ def page_login():
 
 def page_search():
     st.markdown(CSS, unsafe_allow_html=True)
+    # Strip the glass card from the search form — keep it for login only
+    st.markdown("""
+    <style>
+    [data-testid="stForm"] {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      padding: 0 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     render_navbar()
 
     st.markdown("<div style='padding:2rem 2.5rem 2rem;'>", unsafe_allow_html=True)
