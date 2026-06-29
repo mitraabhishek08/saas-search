@@ -32,18 +32,26 @@ body {
   background: linear-gradient(135deg, #020b18 0%, #051e3e 45%, #0a2a52 100%) fixed !important;
 }
 
-/* ── Strip all Streamlit white wrappers ──────────────────────── */
+/* ── Strip ALL Streamlit backgrounds — wildcard + explicit ───── */
+[data-testid] {
+  background-color: transparent !important;
+}
 .stApp,
 .stApp > div,
 [data-testid="stAppViewContainer"],
 [data-testid="stAppViewBlockContainer"],
 [data-testid="stMainBlockContainer"],
 [data-testid="stMainBlockContainer"] > div,
+[data-testid="stBottomBlockContainer"],
 [data-testid="stVerticalBlock"],
+[data-testid="stVerticalBlockBorderWrapper"],
+[data-testid="stDecoration"],
 div[data-testid="stColumn"],
-.main, section.main, div.main, .main > div {
+.main, section.main, div.main, .main > div,
+.appview-container, .css-1d391kg, .css-18e3th9 {
   background: transparent !important;
   background-color: transparent !important;
+  background-image: none !important;
 }
 
 /* ── Streamlit chrome ────────────────────────────────────────── */
@@ -140,18 +148,18 @@ div[data-testid="stTextInput"] input:focus {
 }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
-div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
-  background: linear-gradient(135deg, #1d6fa4, #0ea5e9) !important;
+div[data-testid="stFormSubmitButton"] button {
+  background: linear-gradient(135deg, #f97316, #ea580c) !important;
   border: none !important;
   color: #fff !important;
   border-radius: 10px !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
-  box-shadow: 0 0 22px rgba(14,165,233,0.45) !important;
+  box-shadow: 0 0 22px rgba(249,115,22,0.45) !important;
   transition: all .2s !important;
 }
-div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover {
-  box-shadow: 0 0 36px rgba(14,165,233,0.7) !important;
+div[data-testid="stFormSubmitButton"] button:hover {
+  box-shadow: 0 0 36px rgba(249,115,22,0.7) !important;
   transform: translateY(-1px) !important;
 }
 div[data-testid="stButton"] > button {
