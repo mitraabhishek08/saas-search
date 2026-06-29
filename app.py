@@ -150,50 +150,76 @@ def render_api_pane() -> None:
             st.code(resp_str, language="json")
 
 
-def render_results(data) -> None:
+def _extract_records(data):
+    """Return (records list, total hit count) from the API response."""
+    if isinstance(data, list):
+        return data, len(data)
     if isinstance(data, dict):
-        entities = (
-            data.get("searchResults") or
-            data.get("results")       or
-            data.get("entities")      or
-            data.get("data")          or []
-        )
-        total = data.get("totalCount") or data.get("total") or len(entities)
-    elif isinstance(data, list):
-        entities, total = data, len(data)
-    else:
-        st.warning("Unexpected response format.")
-        st.json(data)
-        return
+        # Primary shape: {"searchResult": {"records": [...], "hits": N}}
+        sr = data.get("searchResult") or {}
+        if sr.get("records") is not None:
+            return sr["records"], sr.get("hits", len(sr["records"]))
+        # Fallback shapes
+        for key in ("searchResults", "results", "entities", "records"):
+            if data.get(key) is not None:
+                records = data[key]
+                return records, data.get("hits") or data.get("totalCount") or data.get("total") or len(records)
+    return [], 0
 
-    st.caption(f"**{total}** result(s) · entity type `c360.organization`")
 
-    if not entities:
+def render_results(data) -> None:
+    import pandas as pd
+
+    records, total = _extract_records(data)
+
+    st.caption(f"**{total}** hit(s) · `c360.organization`")
+
+    if not records:
         st.info("No results found.")
         return
 
-    for entity in entities:
-        inner = entity.get("data") or {}
-        name = (
-            entity.get("label")       or
-            inner.get("fullName")     or
-            inner.get("name")         or
-            entity.get("displayName") or
-            entity.get("name")        or
-            entity.get("businessId")  or "—"
-        )
-        biz_id = entity.get("businessId") or entity.get("id") or "—"
-        score  = entity.get("score")
-        score_str = f"  ·  score {score:.2f}" if score is not None else ""
+    # ── Build flat rows for the table ────────────────────────────────────────
+    rows = []
+    for rec in records:
+        meta    = rec.get("_meta") or {}
+        states  = meta.get("states") or {}
+        address = (rec.get("c360organization.PostalAddress") or [{}])[0]
+        country = address.get("country") or {}
 
-        with st.expander(f"**{name}**  `{biz_id}`{score_str}"):
-            c1, c2, c3 = st.columns(3)
-            c1.markdown(f"**Business ID**  \n`{biz_id}`")
-            c2.markdown(f"**Entity Type**  \n`{entity.get('entityType', 'c360.organization')}`")
-            if score is not None:
-                c3.markdown(f"**Match Score**  \n`{score:.4f}`")
-            st.divider()
-            st.json(entity)
+        rows.append({
+            "Name":         rec.get("c360organization.name") or "—",
+            "Business ID":  meta.get("businessId") or "—",
+            "Score":        round(meta.get("score", 0), 2),
+            "Status":       meta.get("status") or "—",
+            "Validation":   states.get("validation") or "—",
+            "City":         address.get("city") or "—",
+            "Country":      country.get("Name") or country.get("Code") or "—",
+            "Address":      address.get("addressLine1") or "—",
+            "Postal Code":  address.get("postalCode") or "—",
+        })
+
+    df = pd.DataFrame(rows)
+
+    st.dataframe(
+        df,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Score":      st.column_config.NumberColumn(format="%.2f"),
+            "Validation": st.column_config.TextColumn(),
+        },
+    )
+
+    # ── Expandable raw JSON per record ───────────────────────────────────────
+    st.markdown("##### Record details")
+    for rec in records:
+        meta   = rec.get("_meta") or {}
+        name   = rec.get("c360organization.name") or meta.get("businessId") or "—"
+        biz_id = meta.get("businessId") or "—"
+        score  = meta.get("score")
+        score_str = f"  ·  score {score:.2f}" if score is not None else ""
+        with st.expander(f"{name}  `{biz_id}`{score_str}"):
+            st.json(rec)
 
 # ─── Pages ────────────────────────────────────────────────────────────────────
 
