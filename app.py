@@ -12,7 +12,6 @@ try:
 except ImportError:
     pass
 
-# ─── Page Config ──────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="MDM Search",
     page_icon="🔍",
@@ -21,50 +20,69 @@ st.set_page_config(
 )
 
 # ─── CSS ──────────────────────────────────────────────────────────────────────
-GLOBAL_CSS = """
+CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-:root {
-  --orange:       #f97316;
-  --orange-dark:  #ea580c;
-  --orange-lt:    #fff7ed;
-  --orange-ring:  rgba(249,115,22,.18);
-  --bg:           #f8f7f5;
-  --surface:      #ffffff;
-  --text:         #1c1917;
-  --muted:        #78716c;
-  --border:       #e7e5e4;
-  --shadow-sm:    0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
-  --radius:       10px;
-  --success-bg:   #dcfce7;
-  --success-fg:   #15803d;
-  --danger-bg:    #fee2e2;
-  --danger-fg:    #b91c1c;
+/* ── Background: fixed gradient injected via pseudo-element ──── */
+html {
+  height: 100%;
+}
+body {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif !important;
+  background: linear-gradient(135deg, #0f0c29 0%, #302b63 55%, #1a1a3e 100%) fixed !important;
 }
 
-/* ── Streamlit chrome ─────────────────────────────────────────── */
+/* ── Strip all Streamlit white wrappers ──────────────────────── */
+.stApp,
+.stApp > div,
+[data-testid="stAppViewContainer"],
+[data-testid="stAppViewBlockContainer"],
+[data-testid="stMainBlockContainer"],
+[data-testid="stMainBlockContainer"] > div,
+[data-testid="stVerticalBlock"],
+div[data-testid="stColumn"],
+.main, section.main, div.main, .main > div {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ── Streamlit chrome ────────────────────────────────────────── */
 #MainMenu, footer { visibility: hidden !important; }
 header[data-testid="stHeader"] { display: none !important; }
 section[data-testid="stSidebar"] { display: none !important; }
 .block-container { padding: 0 !important; max-width: 100% !important; }
-html, body, [class*="css"] {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
-}
-body  { background: var(--bg) !important; }
-.stApp { background: transparent !important; }
 
-/* ── Navbar: first horizontal block on the page ───────────────── */
+/* ── Base typography ─────────────────────────────────────────── */
+html, body, [class*="css"], p, span, label, div {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  color: rgba(255,255,255,0.9);
+}
+
+/* ── Glass mixin (reused via custom classes) ─────────────────── */
+.glass {
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  background: rgba(255,255,255,0.07) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+}
+
+/* ── Navbar ──────────────────────────────────────────────────── */
 div[data-testid="stHorizontalBlock"]:first-of-type {
-  background: var(--surface) !important;
-  border-bottom: 1px solid var(--border) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background: rgba(255,255,255,0.06) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.1) !important;
   padding: 0 2rem !important;
-  box-shadow: 0 1px 4px rgba(0,0,0,.05) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2) !important;
 }
 div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] {
   display: flex !important;
   align-items: center !important;
-  min-height: 56px !important;
+  min-height: 58px !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
@@ -74,148 +92,147 @@ div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]
   padding-bottom: 0 !important;
   width: 100% !important;
 }
-/* Logout icon button — last column of navbar */
+/* Logout icon button */
 div[data-testid="stHorizontalBlock"]:first-of-type
   > div[data-testid="stColumn"]:last-child
   div[data-testid="stButton"] > button {
-  background: transparent !important;
-  border: 1.5px solid var(--border) !important;
-  color: var(--muted) !important;
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: rgba(255,255,255,0.7) !important;
   border-radius: 50% !important;
-  width: 32px !important;
-  height: 32px !important;
-  min-height: 32px !important;
-  padding: 0 !important;
+  width: 34px !important; height: 34px !important;
+  min-height: 34px !important; padding: 0 !important;
   font-size: 15px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: all .15s !important;
+  backdrop-filter: blur(8px) !important;
+  transition: all .2s !important;
 }
 div[data-testid="stHorizontalBlock"]:first-of-type
   > div[data-testid="stColumn"]:last-child
   div[data-testid="stButton"] > button:hover {
-  border-color: var(--orange) !important;
-  color: var(--orange) !important;
-  background: var(--orange-lt) !important;
+  background: rgba(129,140,248,0.25) !important;
+  border-color: rgba(129,140,248,0.5) !important;
+  color: #a5b4fc !important;
+  box-shadow: 0 0 16px rgba(129,140,248,0.3) !important;
 }
 
-/* ── Inputs ───────────────────────────────────────────────────── */
+/* ── Form (login card + search bar) ─────────────────────────── */
+[data-testid="stForm"] {
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  background: rgba(255,255,255,0.07) !important;
+  border: 1px solid rgba(255,255,255,0.14) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+}
+
+/* ── Inputs ──────────────────────────────────────────────────── */
 div[data-testid="stTextInput"] > label {
-  font-size: 0.8rem !important;
+  font-size: 0.78rem !important;
   font-weight: 600 !important;
-  color: var(--text) !important;
+  color: rgba(255,255,255,0.65) !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
 }
 div[data-testid="stTextInput"] input {
-  border-radius: 8px !important;
-  border: 1.5px solid var(--border) !important;
-  background: var(--surface) !important;
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  border-radius: 10px !important;
+  color: rgba(255,255,255,0.95) !important;
   font-size: 0.9rem !important;
-  color: var(--text) !important;
-  transition: border-color .15s, box-shadow .15s !important;
+  transition: all .2s !important;
+}
+div[data-testid="stTextInput"] input::placeholder {
+  color: rgba(255,255,255,0.3) !important;
 }
 div[data-testid="stTextInput"] input:focus {
-  border-color: var(--orange) !important;
-  box-shadow: 0 0 0 3px var(--orange-ring) !important;
+  background: rgba(255,255,255,0.12) !important;
+  border-color: rgba(129,140,248,0.6) !important;
+  box-shadow: 0 0 0 3px rgba(129,140,248,0.15) !important;
+  outline: none !important;
 }
-div[data-testid="stTextInput"] input::placeholder { color: #a8a29e !important; }
 
-/* ── Primary submit button (Search / Sign in) ─────────────────── */
+/* ── Buttons ─────────────────────────────────────────────────── */
 div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
-  background: var(--orange) !important;
-  border-color: var(--orange) !important;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  border: none !important;
   color: #fff !important;
-  border-radius: 8px !important;
+  border-radius: 10px !important;
   font-weight: 600 !important;
-  font-size: 0.87rem !important;
-  transition: all .15s !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 0 20px rgba(99,102,241,0.4) !important;
+  transition: all .2s !important;
 }
 div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover {
-  background: var(--orange-dark) !important;
-  box-shadow: 0 4px 14px rgba(249,115,22,.35) !important;
+  box-shadow: 0 0 32px rgba(99,102,241,0.65) !important;
   transform: translateY(-1px) !important;
 }
-/* Regular Streamlit buttons (Show API / Hide API toggle) */
 div[data-testid="stButton"] > button {
-  border-radius: 8px !important;
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: rgba(255,255,255,0.85) !important;
+  border-radius: 10px !important;
   font-weight: 500 !important;
-  font-size: 0.85rem !important;
-  transition: all .15s !important;
+  font-size: 0.87rem !important;
+  backdrop-filter: blur(8px) !important;
+  transition: all .2s !important;
+}
+div[data-testid="stButton"] > button:hover {
+  background: rgba(129,140,248,0.2) !important;
+  border-color: rgba(129,140,248,0.45) !important;
+  color: #c4b5fd !important;
+  box-shadow: 0 0 16px rgba(129,140,248,0.25) !important;
 }
 
-/* ── Expanders ────────────────────────────────────────────────── */
+/* ── Expanders (API debug) ───────────────────────────────────── */
 div[data-testid="stExpander"] {
-  border-radius: 8px !important;
-  border: 1px solid var(--border) !important;
-  background: var(--surface) !important;
-  margin-bottom: 6px !important;
-  box-shadow: var(--shadow-sm) !important;
+  backdrop-filter: blur(12px) !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  border-radius: 12px !important;
+  margin-bottom: 8px !important;
   overflow: hidden !important;
 }
 div[data-testid="stExpander"] > details > summary {
-  font-size: 0.87rem !important;
+  font-size: 0.85rem !important;
   font-weight: 500 !important;
   padding: 0.7rem 1rem !important;
-  color: var(--text) !important;
+  color: rgba(255,255,255,0.85) !important;
 }
-div[data-testid="stExpander"] > details > summary:hover { background: var(--bg) !important; }
+div[data-testid="stExpander"] > details > summary:hover {
+  background: rgba(255,255,255,0.05) !important;
+}
 
-/* ── Code blocks ──────────────────────────────────────────────── */
-.stCodeBlock { border-radius: 8px !important; }
+/* ── Dataframe ───────────────────────────────────────────────── */
+div[data-testid="stDataFrame"] {
+  background: rgba(255,255,255,0.04) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  overflow: hidden !important;
+}
+
+/* ── Code blocks ─────────────────────────────────────────────── */
+.stCodeBlock { border-radius: 10px !important; }
 .stCodeBlock code { font-size: 11.5px !important; line-height: 1.6 !important; }
 
-/* ── Alerts ───────────────────────────────────────────────────── */
-div[data-testid="stAlert"] { border-radius: 8px !important; font-size: 0.88rem !important; }
+/* ── Alerts ──────────────────────────────────────────────────── */
+div[data-testid="stAlert"] {
+  background: rgba(255,255,255,0.07) !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  backdrop-filter: blur(8px) !important;
+  color: rgba(255,255,255,0.9) !important;
+}
 
-/* ── Dataframe ────────────────────────────────────────────────── */
-div[data-testid="stDataFrame"] { border-radius: var(--radius) !important; overflow: hidden !important; }
+/* ── Caption / small text ────────────────────────────────────── */
+div[data-testid="stCaptionContainer"] p {
+  color: rgba(255,255,255,0.5) !important;
+}
 
-/* ── Dividers ─────────────────────────────────────────────────── */
-hr { border-color: var(--border) !important; margin: 1rem 0 !important; }
-</style>
-"""
+/* ── Spinner ─────────────────────────────────────────────────── */
+div[data-testid="stSpinner"] p { color: rgba(255,255,255,0.6) !important; }
 
-LOGIN_CSS = """
-<style>
-/* Gradient lives on body — nothing can sit above it */
-body {
-  background: linear-gradient(145deg, #1c0a00 0%, #7c2d12 45%, #431407 100%) fixed !important;
-}
-/* Every Streamlit wrapper must be transparent */
-.stApp,
-.stApp > div,
-[data-testid="stAppViewContainer"],
-[data-testid="stAppViewBlockContainer"],
-[data-testid="stMainBlockContainer"],
-[data-testid="stMainBlockContainer"] > div,
-[data-testid="stVerticalBlock"],
-div[data-testid="stColumn"],
-section.main,
-div.main,
-.main > div {
-  background: transparent !important;
-  background-color: transparent !important;
-}
-[data-testid="stForm"] {
-  background: #ffffff !important;
-  border-radius: 16px !important;
-  padding: 2.25rem 2.5rem !important;
-  box-shadow: 0 32px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06) !important;
-  border: none !important;
-}
-div[data-testid="stTextInput"] > label { color: #1c1917 !important; }
-div[data-testid="stFormSubmitButton"] > button {
-  background: #f97316 !important;
-  border-color: #f97316 !important;
-  color: white !important;
-  font-weight: 600 !important;
-  border-radius: 8px !important;
-}
-div[data-testid="stFormSubmitButton"] > button:hover {
-  background: #ea580c !important;
-  box-shadow: 0 4px 14px rgba(249,115,22,.4) !important;
-  transform: translateY(-1px) !important;
-}
+/* ── Divider ─────────────────────────────────────────────────── */
+hr { border-color: rgba(255,255,255,0.1) !important; }
 </style>
 """
 
@@ -239,19 +256,16 @@ def _search_host(base_api_url: str) -> str:
     return re.sub(r"^(https?://)([^/]+)", r"\1usw1-mdm.\2", base_api_url.rstrip("/"))
 
 
-def _log(method: str, url: str, req: dict, status, resp) -> None:
+def _log(method, url, req, status, resp):
     st.session_state.api_logs.insert(0, {
-        "ts":       datetime.now().strftime("%H:%M:%S"),
-        "method":   method,
-        "url":      url,
-        "request":  req,
-        "status":   status,
-        "response": resp,
+        "ts": datetime.now().strftime("%H:%M:%S"),
+        "method": method, "url": url,
+        "request": req, "status": status, "response": resp,
     })
     st.session_state.api_logs = st.session_state.api_logs[:10]
 
 
-def mdm_login(pod_url: str, username: str, password: str):
+def mdm_login(pod_url, username, password):
     url     = f"{pod_url.rstrip('/')}/saas/public/core/v3/login"
     payload = {"username": username, "password": password}
     try:
@@ -261,9 +275,9 @@ def mdm_login(pod_url: str, username: str, password: str):
         _log("POST", url, {**payload, "password": "***"}, r.status_code, data)
         ui           = data.get("userInfo") or {}
         session_id   = data.get("icSessionId") or ui.get("icSessionId") or data.get("sessionId") or ui.get("sessionId") or ""
-        base_api_url = data.get("baseApiUrl")  or ui.get("baseApiUrl")  or pod_url
+        base_api_url = data.get("baseApiUrl") or ui.get("baseApiUrl") or pod_url
         if not session_id:
-            return None, None, f"No session ID in response. Keys: {list(data.keys())}"
+            return None, None, f"No session ID. Keys: {list(data.keys())}"
         return session_id, base_api_url, None
     except requests.exceptions.HTTPError as e:
         body = e.response.text if e.response else str(e)
@@ -274,19 +288,10 @@ def mdm_login(pod_url: str, username: str, password: str):
         return None, None, str(e)
 
 
-def mdm_search(query: str, session_id: str, base_api_url: str):
+def mdm_search(query, session_id, base_api_url):
     url     = f"{_search_host(base_api_url)}/search/public/api/v1/search"
-    payload = {
-        "entityType":      "c360.organization",
-        "search":          query,
-        "recordsToReturn": 25,
-        "recordOffset":    0,
-    }
-    headers = {
-        "IDS-SESSION-ID": session_id,
-        "Content-Type":   "application/json",
-        "Accept":         "application/json",
-    }
+    payload = {"entityType": "c360.organization", "search": query, "recordsToReturn": 25, "recordOffset": 0}
+    headers = {"IDS-SESSION-ID": session_id, "Content-Type": "application/json", "Accept": "application/json"}
     try:
         r = requests.post(url, json=payload, headers=headers, timeout=30)
         r.raise_for_status()
@@ -323,80 +328,66 @@ def _extract_records(data):
 
 # ─── Components ───────────────────────────────────────────────────────────────
 
-def render_navbar() -> None:
+def render_navbar():
     brand_col, _, user_col, logout_col = st.columns([3, 4, 1.5, 0.25])
-
     with brand_col:
         st.markdown("""
         <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:.97rem;font-weight:700;color:#1c1917;letter-spacing:-.3px;">
-            MDM Search
-          </span>
-          <span style="
-            background:#fff7ed;border:1px solid #fed7aa;border-radius:20px;
-            padding:2px 10px;font-size:.7rem;font-weight:600;color:#ea580c;
-          ">Informatica C360</span>
+          <span style="font-size:.97rem;font-weight:700;color:rgba(255,255,255,.95);
+                       letter-spacing:-.3px;">MDM Search</span>
+          <span style="background:rgba(129,140,248,.2);border:1px solid rgba(129,140,248,.35);
+                       border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:600;
+                       color:#a5b4fc;">Informatica C360</span>
         </div>
         """, unsafe_allow_html=True)
-
     with user_col:
         st.markdown(f"""
         <div style="display:flex;justify-content:flex-end;">
-          <span style="
-            background:#f8f7f5;border:1px solid #e7e5e4;border-radius:20px;
-            padding:5px 14px;font-size:.82rem;font-weight:500;color:#1c1917;
-            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-          ">{st.session_state.username}</span>
+          <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+                       border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:500;
+                       color:rgba(255,255,255,.85);white-space:nowrap;
+                       backdrop-filter:blur(8px);">{st.session_state.username}</span>
         </div>
         """, unsafe_allow_html=True)
-
     with logout_col:
         if st.button("⏻", key="logout_nav", help="Sign out"):
             _do_logout()
 
 
-def render_api_pane() -> None:
+def render_api_pane():
     st.markdown("""
-    <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;
-              letter-spacing:.7px;color:#a8a29e;margin:0 0 .75rem 0;">
-      API Debug
-    </p>""", unsafe_allow_html=True)
-
+    <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.7px;
+              color:rgba(255,255,255,.4);margin:0 0 .75rem;">API Debug</p>
+    """, unsafe_allow_html=True)
     if not st.session_state.api_logs:
         st.caption("No API calls yet.")
         return
-
     for i, log in enumerate(st.session_state.api_logs):
         ok    = isinstance(log["status"], int) and log["status"] < 400
-        path  = log["url"].rsplit("/", 1)[-1]
-        label = f"{log['ts']}  ·  {log['method']} /{path}  ·  {log['status']}"
+        color = "#4ade80" if ok else "#f87171"
+        label = f"{log['ts']}  ·  {log['method']} /{log['url'].rsplit('/',1)[-1]}  ·  {log['status']}"
         with st.expander(label, expanded=(i == 0)):
             st.markdown("**URL**")
             st.code(f"{log['method']} {log['url']}", language="http")
             st.markdown("**Request body**")
             st.code(json.dumps(log["request"], indent=2), language="json")
-            resp_str = (
-                json.dumps(log["response"], indent=2)
-                if isinstance(log["response"], (dict, list))
-                else str(log["response"])
-            )
+            resp_str = json.dumps(log["response"], indent=2) if isinstance(log["response"], (dict, list)) else str(log["response"])
             st.markdown(f"**Response** — `{log['status']}`")
             st.code(resp_str, language="json")
 
 
-def render_results(data) -> None:
+def render_results(data):
     import pandas as pd
 
     records, total = _extract_records(data)
 
     st.markdown(f"""
-    <div style="display:flex;align-items:center;gap:10px;margin:2rem 0 0.75rem;">
-      <span style="font-size:.75rem;font-weight:700;text-transform:uppercase;
-                   letter-spacing:.5px;color:#78716c;">Organizations</span>
-      <span style="
-        background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;
-        border-radius:20px;padding:2px 10px;font-size:.78rem;font-weight:700;
-      ">{total} found</span>
+    <div style="display:flex;align-items:center;gap:10px;margin:2rem 0 .75rem;">
+      <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+                   color:rgba(255,255,255,.5);">Organizations</span>
+      <span style="background:rgba(129,140,248,.2);border:1px solid rgba(129,140,248,.3);
+                   border-radius:20px;padding:2px 10px;font-size:.78rem;font-weight:700;
+                   color:#a5b4fc;">{total} found</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -424,55 +415,56 @@ def render_results(data) -> None:
     df = pd.DataFrame(rows)
 
     def _style_status(val):
-        if val == "ACTIVE":
-            return "background-color:#dcfce7;color:#15803d;font-weight:600"
-        if val in ("INACTIVE", "DELETED"):
-            return "background-color:#fee2e2;color:#b91c1c;font-weight:600"
-        return "color:#78716c"
+        if val == "ACTIVE":   return "background:rgba(74,222,128,.15);color:#4ade80;font-weight:600"
+        if val in ("INACTIVE","DELETED"): return "background:rgba(248,113,113,.15);color:#f87171;font-weight:600"
+        return "color:rgba(255,255,255,.6)"
 
     def _style_validation(val):
-        if val == "PASSED":
-            return "background-color:#dcfce7;color:#15803d;font-weight:600"
-        if val == "FAILED":
-            return "background-color:#fee2e2;color:#b91c1c;font-weight:600"
-        return "color:#78716c"
+        if val == "PASSED": return "background:rgba(74,222,128,.15);color:#4ade80;font-weight:600"
+        if val == "FAILED": return "background:rgba(248,113,113,.15);color:#f87171;font-weight:600"
+        return "color:rgba(255,255,255,.6)"
 
     styled = (
         df.style
         .map(_style_status,     subset=["Status"])
         .map(_style_validation, subset=["Validation"])
-        .set_properties(**{"font-size": "13px"})
-        .set_table_styles([{
-            "selector": "th",
-            "props": [
-                ("background-color", "#fff7ed"),
-                ("color", "#ea580c"),
+        .set_properties(**{"font-size": "13px", "color": "rgba(255,255,255,0.85)"})
+        .set_table_styles([
+            {"selector": "th", "props": [
+                ("background", "rgba(129,140,248,0.15)"),
+                ("color", "#a5b4fc"),
                 ("font-weight", "700"),
-                ("font-size", "12px"),
+                ("font-size", "11px"),
                 ("text-transform", "uppercase"),
-                ("letter-spacing", "0.4px"),
-                ("border-bottom", "2px solid #fed7aa"),
-            ]
-        }])
+                ("letter-spacing", "0.5px"),
+                ("border-bottom", "1px solid rgba(129,140,248,0.25)"),
+            ]},
+            {"selector": "td", "props": [("border-bottom", "1px solid rgba(255,255,255,0.05)")]},
+            {"selector": "tr:hover td", "props": [("background", "rgba(255,255,255,0.04)")]},
+        ])
     )
-
     st.dataframe(styled, use_container_width=True, hide_index=True)
 
 # ─── Pages ────────────────────────────────────────────────────────────────────
 
-def page_login() -> None:
-    st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
-    st.markdown(LOGIN_CSS,  unsafe_allow_html=True)
+def page_login():
+    st.markdown(CSS, unsafe_allow_html=True)
 
     _, center, _ = st.columns([1, 1.1, 1])
     with center:
-        st.markdown("<div style='height:4rem'></div>", unsafe_allow_html=True)
+        st.markdown("<div style='height:5rem'></div>", unsafe_allow_html=True)
+        st.markdown("""
+        <div style="text-align:center;margin-bottom:2rem;">
+          <p style="font-size:1.5rem;font-weight:700;color:rgba(255,255,255,.95);
+                    letter-spacing:-.5px;margin:0 0 6px;">MDM Search</p>
+          <p style="font-size:.85rem;color:rgba(255,255,255,.4);margin:0;">
+            Informatica C360 / IDMC
+          </p>
+        </div>
+        """, unsafe_allow_html=True)
+
         with st.form("login_form"):
-            pod_url  = st.text_input(
-                "Pod URL",
-                value=os.getenv("IDMC_POD_URL", "https://dmp-us.informaticacloud.com"),
-                help="IDMC pod base URL",
-            )
+            pod_url  = st.text_input("Pod URL", value=os.getenv("IDMC_POD_URL", "https://dmp-us.informaticacloud.com"), help="IDMC pod base URL")
             username = st.text_input("Username", value=os.getenv("IDMC_USERNAME", ""))
             password = st.text_input("Password", type="password")
             st.markdown("<div style='height:4px'></div>", unsafe_allow_html=True)
@@ -497,14 +489,12 @@ def page_login() -> None:
             render_api_pane()
 
 
-def page_search() -> None:
-    st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
+def page_search():
+    st.markdown(CSS, unsafe_allow_html=True)
     render_navbar()
 
-    # ── Content area ──────────────────────────────────────────────────────────
     st.markdown("<div style='padding:2rem 2.5rem 2rem;'>", unsafe_allow_html=True)
 
-    # ── Search form ───────────────────────────────────────────────────────────
     with st.form("search_form", clear_on_submit=False):
         q_col, btn_col = st.columns([8, 1])
         with q_col:
@@ -527,13 +517,10 @@ def page_search() -> None:
         else:
             st.session_state.search_results = data
 
-    # ── Results table ─────────────────────────────────────────────────────────
     if st.session_state.search_results is not None:
         render_results(st.session_state.search_results)
 
-        # ── API toggle + pane (below table) ───────────────────────────────────
         st.markdown("<div style='margin-top:2rem;'>", unsafe_allow_html=True)
-
         api_label = "Hide API Response" if st.session_state.show_api_pane else "Show API Response"
         if st.button(api_label, key="toggle_api"):
             st.session_state.show_api_pane = not st.session_state.show_api_pane
