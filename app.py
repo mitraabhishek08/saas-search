@@ -20,29 +20,28 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# ─── Global CSS ───────────────────────────────────────────────────────────────
+# ─── CSS ──────────────────────────────────────────────────────────────────────
 GLOBAL_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --primary:      #2563eb;
-  --primary-dark: #1d4ed8;
-  --primary-lt:   #eff6ff;
-  --bg:           #f1f5f9;
+  --orange:       #f97316;
+  --orange-dark:  #ea580c;
+  --orange-lt:    #fff7ed;
+  --orange-ring:  rgba(249,115,22,.18);
+  --bg:           #f8f7f5;
   --surface:      #ffffff;
-  --text:         #0f172a;
-  --muted:        #64748b;
-  --border:       #e2e8f0;
-  --shadow-sm:    0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+  --text:         #1c1917;
+  --muted:        #78716c;
+  --border:       #e7e5e4;
+  --shadow-sm:    0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
   --shadow-md:    0 4px 16px rgba(0,0,0,.08);
   --radius:       10px;
   --success-bg:   #dcfce7;
   --success-fg:   #15803d;
   --danger-bg:    #fee2e2;
   --danger-fg:    #b91c1c;
-  --warning-bg:   #fef3c7;
-  --warning-fg:   #92400e;
 }
 
 /* ── Streamlit chrome ─────────────────────────────────────────── */
@@ -56,13 +55,54 @@ html, body, [class*="css"] {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
 }
 
+/* ── App background ───────────────────────────────────────────── */
+.stApp { background: var(--bg) !important; }
+
+/* ── Navbar row ───────────────────────────────────────────────── */
+div[data-testid="stMainBlockContainer"] > div > div > div[data-testid="stVerticalBlock"]
+  > div[data-testid="stHorizontalBlock"]:first-child {
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 0 2rem !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 999 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,.05) !important;
+}
+div[data-testid="stMainBlockContainer"] > div > div > div[data-testid="stVerticalBlock"]
+  > div[data-testid="stHorizontalBlock"]:first-child > div[data-testid="stColumn"] {
+  padding: 0 !important;
+}
+
+/* ── Navbar logout button ─────────────────────────────────────── */
+.nav-logout div[data-testid="stButton"] > button {
+  background: transparent !important;
+  border: 1.5px solid var(--border) !important;
+  color: var(--muted) !important;
+  border-radius: 50% !important;
+  width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 0 !important;
+  font-size: 15px !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all .15s !important;
+}
+.nav-logout div[data-testid="stButton"] > button:hover {
+  border-color: var(--orange) !important;
+  color: var(--orange) !important;
+  background: var(--orange-lt) !important;
+}
+
 /* ── Inputs ───────────────────────────────────────────────────── */
 div[data-testid="stTextInput"] > label {
   font-size: 0.8rem !important;
   font-weight: 600 !important;
   color: var(--text) !important;
   letter-spacing: 0.1px !important;
-  margin-bottom: 4px !important;
 }
 div[data-testid="stTextInput"] input {
   border-radius: 8px !important;
@@ -73,28 +113,42 @@ div[data-testid="stTextInput"] input {
   transition: border-color .15s, box-shadow .15s !important;
 }
 div[data-testid="stTextInput"] input:focus {
-  border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(37,99,235,.12) !important;
-  outline: none !important;
+  border-color: var(--orange) !important;
+  box-shadow: 0 0 0 3px var(--orange-ring) !important;
 }
+div[data-testid="stTextInput"] input::placeholder { color: #a8a29e !important; }
 
-/* ── Buttons ──────────────────────────────────────────────────── */
-div[data-testid="stFormSubmitButton"] > button,
-div[data-testid="stButton"] > button {
+/* ── Buttons (primary) ────────────────────────────────────────── */
+div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"],
+div[data-testid="stFormSubmitButton"] > button[kind="primary"] {
+  background: var(--orange) !important;
+  border-color: var(--orange) !important;
+  color: #fff !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
   font-size: 0.87rem !important;
   transition: all .15s !important;
 }
-div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
-  background: var(--primary) !important;
-  border-color: var(--primary) !important;
-  color: #fff !important;
-}
-div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover {
-  background: var(--primary-dark) !important;
-  box-shadow: 0 4px 14px rgba(37,99,235,.35) !important;
+div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover,
+div[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover {
+  background: var(--orange-dark) !important;
+  border-color: var(--orange-dark) !important;
+  box-shadow: 0 4px 14px rgba(249,115,22,.35) !important;
   transform: translateY(-1px) !important;
+}
+/* Secondary submit buttons */
+div[data-testid="stFormSubmitButton"] > button[kind="secondaryFormSubmit"] {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  font-size: 0.87rem !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+  transition: all .15s !important;
+}
+div[data-testid="stFormSubmitButton"] > button[kind="secondaryFormSubmit"]:hover {
+  border-color: var(--orange) !important;
+  color: var(--orange) !important;
+  background: var(--orange-lt) !important;
 }
 
 /* ── Expanders ────────────────────────────────────────────────── */
@@ -110,9 +164,10 @@ div[data-testid="stExpander"] > details > summary {
   font-size: 0.87rem !important;
   font-weight: 500 !important;
   padding: 0.7rem 1rem !important;
+  color: var(--text) !important;
 }
 div[data-testid="stExpander"] > details > summary:hover {
-  background: #f8fafc !important;
+  background: var(--bg) !important;
 }
 
 /* ── Code blocks ──────────────────────────────────────────────── */
@@ -123,53 +178,44 @@ div[data-testid="stExpander"] > details > summary:hover {
 div[data-testid="stAlert"] {
   border-radius: 8px !important;
   font-size: 0.88rem !important;
-  border-left-width: 3px !important;
 }
 
 /* ── Dataframe ────────────────────────────────────────────────── */
 div[data-testid="stDataFrame"] {
   border-radius: var(--radius) !important;
   overflow: hidden !important;
-  box-shadow: var(--shadow-sm) !important;
 }
 
 /* ── Dividers ─────────────────────────────────────────────────── */
 hr { border-color: var(--border) !important; margin: 1rem 0 !important; }
-
-/* ── Caption / small text ─────────────────────────────────────── */
-div[data-testid="stCaptionContainer"] p {
-  color: var(--muted) !important;
-  font-size: 0.82rem !important;
-}
-
-/* ── Spinner ──────────────────────────────────────────────────── */
-div[data-testid="stSpinner"] p {
-  font-size: 0.87rem !important;
-  color: var(--muted) !important;
-}
 </style>
 """
 
 LOGIN_CSS = """
 <style>
 .stApp {
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #0f172a 100%) !important;
+  background: linear-gradient(145deg, #1c0a00 0%, #7c2d12 45%, #431407 100%) !important;
 }
 [data-testid="stForm"] {
   background: white !important;
   border-radius: 16px !important;
-  padding: 2rem 2.25rem !important;
-  box-shadow: 0 24px 64px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06) !important;
+  padding: 2.25rem 2.5rem !important;
+  box-shadow: 0 32px 80px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.06) !important;
   border: none !important;
 }
-/* On login page make label text dark (card is white) */
-div[data-testid="stTextInput"] > label { color: #0f172a !important; }
-</style>
-"""
-
-SEARCH_CSS = """
-<style>
-.stApp { background: #f1f5f9 !important; }
+div[data-testid="stTextInput"] > label { color: #1c1917 !important; }
+div[data-testid="stFormSubmitButton"] > button {
+  background: #f97316 !important;
+  border-color: #f97316 !important;
+  color: white !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+}
+div[data-testid="stFormSubmitButton"] > button:hover {
+  background: #ea580c !important;
+  box-shadow: 0 4px 14px rgba(249,115,22,.4) !important;
+  transform: translateY(-1px) !important;
+}
 </style>
 """
 
@@ -255,51 +301,76 @@ def mdm_search(query: str, session_id: str, base_api_url: str):
         _log("POST", url, payload, "ERR", str(e))
         return None, str(e)
 
+# ─── Helpers ──────────────────────────────────────────────────────────────────
+
+def _do_logout():
+    for k, v in _DEFAULTS.items():
+        st.session_state[k] = v
+    st.rerun()
+
+
+def _extract_records(data):
+    if isinstance(data, list):
+        return data, len(data)
+    if isinstance(data, dict):
+        sr = data.get("searchResult") or {}
+        if sr.get("records") is not None:
+            return sr["records"], sr.get("hits", len(sr["records"]))
+        for key in ("searchResults", "results", "entities", "records"):
+            if data.get(key) is not None:
+                recs = data[key]
+                return recs, data.get("hits") or data.get("totalCount") or data.get("total") or len(recs)
+    return [], 0
+
 # ─── Components ───────────────────────────────────────────────────────────────
 
-def render_navbar(username: str) -> None:
-    st.markdown(f"""
-    <div style="
-        background:#fff;
-        border-bottom:1px solid #e2e8f0;
-        padding:0 2rem;
-        height:56px;
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        box-shadow:0 1px 3px rgba(0,0,0,.06);
-        margin-bottom:0;
-    ">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="
-          width:30px;height:30px;border-radius:8px;
-          background:#2563eb;
-          display:flex;align-items:center;justify-content:center;
-          color:#fff;font-weight:800;font-size:14px;letter-spacing:-0.5px;
-        ">M</div>
-        <span style="font-weight:700;font-size:1rem;color:#0f172a;letter-spacing:-0.3px;">MDM Search</span>
-        <span style="
-          background:#f1f5f9;border:1px solid #e2e8f0;
-          border-radius:20px;padding:2px 10px;
-          font-size:0.72rem;font-weight:600;color:#64748b;letter-spacing:0.2px;
-          margin-left:4px;
-        ">Informatica C360</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="
-          background:#f1f5f9;border:1px solid #e2e8f0;
-          border-radius:20px;padding:4px 14px;
-          font-size:0.82rem;font-weight:500;color:#0f172a;
-        ">⬤&nbsp; {username}</span>
-      </div>
-    </div>
-    """, unsafe_allow_html=True)
+def render_navbar() -> None:
+    brand_col, spacer_col, user_col, logout_col = st.columns([3, 4, 1.4, 0.3])
+
+    with brand_col:
+        st.markdown("""
+        <div style="display:flex;align-items:center;gap:10px;height:52px;padding-left:0.5rem;">
+          <span style="font-size:.97rem;font-weight:700;color:#1c1917;letter-spacing:-.3px;">
+            MDM Search
+          </span>
+          <span style="
+            background:#fff7ed;border:1px solid #fed7aa;border-radius:20px;
+            padding:2px 10px;font-size:.7rem;font-weight:600;color:#ea580c;
+          ">Informatica C360</span>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with spacer_col:
+        st.markdown('<div style="height:52px;"></div>', unsafe_allow_html=True)
+
+    with user_col:
+        st.markdown(f"""
+        <div style="display:flex;align-items:center;justify-content:flex-end;
+                    height:52px;gap:8px;padding-right:0.25rem;">
+          <span style="
+            background:#f8f7f5;border:1px solid #e7e5e4;border-radius:20px;
+            padding:5px 14px;font-size:.82rem;font-weight:500;color:#1c1917;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;
+          ">{st.session_state.username}</span>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with logout_col:
+        st.markdown("""
+        <div style="display:flex;align-items:center;justify-content:flex-end;
+                    height:52px;padding-right:0.75rem;">
+        """, unsafe_allow_html=True)
+        st.markdown('<div class="nav-logout">', unsafe_allow_html=True)
+        if st.button("⏻", key="logout_nav", help="Sign out"):
+            _do_logout()
+        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_api_pane() -> None:
     st.markdown("""
     <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;
-              letter-spacing:.7px;color:#94a3b8;margin:0 0 .6rem;">
+              letter-spacing:.7px;color:#a8a29e;margin:0 0 .6rem 0;">
       API Debug
     </p>""", unsafe_allow_html=True)
 
@@ -309,13 +380,8 @@ def render_api_pane() -> None:
 
     for i, log in enumerate(st.session_state.api_logs):
         ok    = isinstance(log["status"], int) and log["status"] < 400
-        badge = (
-            f'<span style="background:#dcfce7;color:#15803d;border-radius:4px;'
-            f'padding:1px 6px;font-size:.75rem;font-weight:700;">{log["status"]}</span>'
-            if ok else
-            f'<span style="background:#fee2e2;color:#b91c1c;border-radius:4px;'
-            f'padding:1px 6px;font-size:.75rem;font-weight:700;">{log["status"]}</span>'
-        )
+        color = "#15803d" if ok else "#b91c1c"
+        bg    = "#dcfce7" if ok else "#fee2e2"
         path  = log["url"].rsplit("/", 1)[-1]
         label = f"{log['ts']}  ·  {log['method']} /{path}  ·  {log['status']}"
 
@@ -333,35 +399,19 @@ def render_api_pane() -> None:
             st.code(resp_str, language="json")
 
 
-def _extract_records(data):
-    if isinstance(data, list):
-        return data, len(data)
-    if isinstance(data, dict):
-        sr = data.get("searchResult") or {}
-        if sr.get("records") is not None:
-            return sr["records"], sr.get("hits", len(sr["records"]))
-        for key in ("searchResults", "results", "entities", "records"):
-            if data.get(key) is not None:
-                recs = data[key]
-                return recs, data.get("hits") or data.get("totalCount") or data.get("total") or len(recs)
-    return [], 0
-
-
 def render_results(data) -> None:
     import pandas as pd
 
     records, total = _extract_records(data)
 
-    # ── Results count badge ───────────────────────────────────────────────────
     st.markdown(f"""
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1rem;">
+    <div style="display:flex;align-items:center;gap:10px;margin:1.25rem 0 0.75rem;">
       <span style="font-size:.75rem;font-weight:700;text-transform:uppercase;
-                   letter-spacing:.5px;color:#64748b;">Results</span>
-      <span style="background:#eff6ff;color:#2563eb;border-radius:20px;
-                   padding:2px 10px;font-size:.78rem;font-weight:700;">
-        {total} found
-      </span>
-      <span style="font-size:.75rem;color:#94a3b8;">·  c360.organization</span>
+                   letter-spacing:.5px;color:#78716c;">Organizations</span>
+      <span style="
+        background:#fff7ed;color:#ea580c;border:1px solid #fed7aa;
+        border-radius:20px;padding:2px 10px;font-size:.78rem;font-weight:700;
+      ">{total} found</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -369,7 +419,6 @@ def render_results(data) -> None:
         st.info("No results matched your query.")
         return
 
-    # ── Build table rows (no Score column) ───────────────────────────────────
     rows = []
     for rec in records:
         meta   = rec.get("_meta") or {}
@@ -391,37 +440,43 @@ def render_results(data) -> None:
 
     def _style_status(val):
         if val == "ACTIVE":
-            return "background-color:#dcfce7;color:#15803d;font-weight:600;border-radius:4px"
+            return "background-color:#dcfce7;color:#15803d;font-weight:600"
         if val in ("INACTIVE", "DELETED"):
-            return "background-color:#fee2e2;color:#b91c1c;font-weight:600;border-radius:4px"
-        return "color:#64748b"
+            return "background-color:#fee2e2;color:#b91c1c;font-weight:600"
+        return "color:#78716c"
 
     def _style_validation(val):
         if val == "PASSED":
-            return "background-color:#dcfce7;color:#15803d;font-weight:600;border-radius:4px"
+            return "background-color:#dcfce7;color:#15803d;font-weight:600"
         if val == "FAILED":
-            return "background-color:#fee2e2;color:#b91c1c;font-weight:600;border-radius:4px"
-        return "color:#64748b"
+            return "background-color:#fee2e2;color:#b91c1c;font-weight:600"
+        return "color:#78716c"
 
     styled = (
         df.style
-        .map(_style_status,    subset=["Status"])
+        .map(_style_status,     subset=["Status"])
         .map(_style_validation, subset=["Validation"])
         .set_properties(**{"font-size": "13px"})
+        .set_table_styles([{
+            "selector": "th",
+            "props": [
+                ("background-color", "#fff7ed"),
+                ("color", "#ea580c"),
+                ("font-weight", "700"),
+                ("font-size", "12px"),
+                ("text-transform", "uppercase"),
+                ("letter-spacing", "0.4px"),
+                ("border-bottom", "2px solid #fed7aa"),
+            ]
+        }])
     )
 
-    # ── White card wrapper ────────────────────────────────────────────────────
-    st.markdown("""
-    <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;
-                padding:1px;box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:1.25rem;">
-    """, unsafe_allow_html=True)
     st.dataframe(styled, use_container_width=True, hide_index=True)
-    st.markdown("</div>", unsafe_allow_html=True)
 
-    # ── Raw JSON per record ───────────────────────────────────────────────────
+    # ── Record details ────────────────────────────────────────────────────────
     st.markdown("""
-    <p style="font-size:.75rem;font-weight:700;text-transform:uppercase;
-              letter-spacing:.5px;color:#64748b;margin:1.25rem 0 .5rem;">
+    <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;
+              letter-spacing:.5px;color:#a8a29e;margin:1.5rem 0 .5rem;">
       Record Details
     </p>""", unsafe_allow_html=True)
 
@@ -430,15 +485,16 @@ def render_results(data) -> None:
         name   = rec.get("c360organization.name") or meta.get("businessId") or "—"
         biz_id = meta.get("businessId") or "—"
         status = meta.get("status", "")
-        color  = "#15803d" if status == "ACTIVE" else "#b91c1c" if status else "#64748b"
-        label  = f"{name}   {biz_id}"
-        with st.expander(label):
-            st.markdown(
-                f'<span style="background:{"#dcfce7" if status=="ACTIVE" else "#fee2e2"};'
-                f'color:{color};border-radius:20px;padding:2px 10px;'
-                f'font-size:.75rem;font-weight:700;">{status}</span>',
-                unsafe_allow_html=True,
-            )
+        is_ok  = status == "ACTIVE"
+        with st.expander(f"{name}   ·   {biz_id}"):
+            if status:
+                st.markdown(
+                    f'<span style="background:{"#dcfce7" if is_ok else "#fee2e2"};'
+                    f'color:{"#15803d" if is_ok else "#b91c1c"};'
+                    f'border-radius:20px;padding:2px 10px;'
+                    f'font-size:.75rem;font-weight:700;">{status}</span>',
+                    unsafe_allow_html=True,
+                )
             st.json(rec)
 
 # ─── Pages ────────────────────────────────────────────────────────────────────
@@ -447,10 +503,9 @@ def page_login() -> None:
     st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
     st.markdown(LOGIN_CSS,  unsafe_allow_html=True)
 
-    _, center, _ = st.columns([1, 1.2, 1])
+    _, center, _ = st.columns([1, 1.1, 1])
     with center:
-        st.markdown("<div style='height:3.5rem'></div>", unsafe_allow_html=True)
-
+        st.markdown("<div style='height:4rem'></div>", unsafe_allow_html=True)
         with st.form("login_form"):
             pod_url  = st.text_input(
                 "Pod URL",
@@ -482,39 +537,27 @@ def page_login() -> None:
 
 
 def page_search() -> None:
-    st.markdown(GLOBAL_CSS,  unsafe_allow_html=True)
-    st.markdown(SEARCH_CSS,  unsafe_allow_html=True)
+    st.markdown(GLOBAL_CSS, unsafe_allow_html=True)
 
-    render_navbar(st.session_state.username)
+    # ── Navbar ────────────────────────────────────────────────────────────────
+    render_navbar()
 
-    # ── Content area ──────────────────────────────────────────────────────────
-    st.markdown("<div style='padding:1.75rem 2rem 0;'>", unsafe_allow_html=True)
+    # ── Content ───────────────────────────────────────────────────────────────
+    st.markdown("<div style='padding:2rem 2.5rem 0;'>", unsafe_allow_html=True)
 
-    # ── Search card ───────────────────────────────────────────────────────────
-    st.markdown("""
-    <div style="background:#fff;border-radius:10px;border:1px solid #e2e8f0;
-                padding:1.25rem 1.5rem 0.25rem;
-                box-shadow:0 1px 3px rgba(0,0,0,.06);margin-bottom:1.25rem;">
-      <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;
-                letter-spacing:.5px;color:#64748b;margin:0 0 .5rem;">
-        Search Organizations
-      </p>
-    </div>
-    """, unsafe_allow_html=True)
-
+    # ── Search form ───────────────────────────────────────────────────────────
     with st.form("search_form", clear_on_submit=False):
-        q_col, btn_col, toggle_col = st.columns([6, 1, 1])
+        q_col, search_btn, api_btn = st.columns([7, 0.9, 0.9])
         with q_col:
             query = st.text_input(
                 "query",
                 value=st.session_state.search_query,
-                placeholder="e.g. Walt Disney",
+                placeholder="Search organizations — e.g. Walt Disney",
                 label_visibility="collapsed",
             )
-        with btn_col:
+        with search_btn:
             search_clicked = st.form_submit_button("Search", use_container_width=True)
-        with toggle_col:
-            # Can't use a regular button inside a form; use secondary submit
+        with api_btn:
             toggle_clicked = st.form_submit_button(
                 "Hide API" if st.session_state.show_api_pane else "Show API",
                 use_container_width=True,
@@ -541,19 +584,12 @@ def page_search() -> None:
             if st.session_state.search_results is not None:
                 render_results(st.session_state.search_results)
         with right:
+            st.markdown("<div style='margin-top:1.25rem;'>", unsafe_allow_html=True)
             render_api_pane()
+            st.markdown("</div>", unsafe_allow_html=True)
     else:
         if st.session_state.search_results is not None:
             render_results(st.session_state.search_results)
-
-    # ── Footer / logout ───────────────────────────────────────────────────────
-    st.markdown("<div style='height:2rem'></div>", unsafe_allow_html=True)
-    _, _, logout_col = st.columns([5, 1, 1])
-    with logout_col:
-        if st.button("Log out", use_container_width=True, key="logout"):
-            for k, v in _DEFAULTS.items():
-                st.session_state[k] = v
-            st.rerun()
 
     st.markdown("</div>", unsafe_allow_html=True)
 
