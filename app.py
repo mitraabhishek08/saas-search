@@ -123,6 +123,31 @@ div[data-testid="stFormSubmitButton"] button:hover {
   transform: translateY(-1px) !important;
 }
 
+/* ── Expander summary: fix arrow/label overlap ───────────────── */
+div[data-testid="stExpander"] details summary {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  list-style: none !important;
+}
+div[data-testid="stExpander"] details summary > svg,
+div[data-testid="stExpander"] details summary > span > svg {
+  flex-shrink: 0 !important;
+  order: 0 !important;
+}
+div[data-testid="stExpander"] details summary > div,
+div[data-testid="stExpander"] details summary > p,
+div[data-testid="stExpander"] details summary > span:not(:has(svg)) {
+  flex: 1 !important;
+  margin: 0 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
 /* ── Code blocks ─────────────────────────────────────────────── */
 .stCodeBlock { border-radius: 10px !important; }
 .stCodeBlock code { font-size: 11.5px !important; line-height: 1.6 !important; }
