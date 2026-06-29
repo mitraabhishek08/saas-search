@@ -449,24 +449,7 @@ def page_login() -> None:
 
     _, center, _ = st.columns([1, 1.2, 1])
     with center:
-        # Logo + title above the form card
-        st.markdown("""
-        <div style="text-align:center;margin-bottom:1.5rem;margin-top:3.5rem;">
-          <div style="
-            width:48px;height:48px;border-radius:12px;
-            background:#2563eb;
-            display:inline-flex;align-items:center;justify-content:center;
-            color:#fff;font-weight:800;font-size:22px;
-            box-shadow:0 8px 24px rgba(37,99,235,.45);
-            margin-bottom:1rem;
-          ">M</div>
-          <h2 style="color:#fff;font-size:1.6rem;font-weight:800;
-                     letter-spacing:-0.5px;margin:0 0 6px;">MDM Search</h2>
-          <p style="color:#94a3b8;font-size:.88rem;margin:0;">
-            Informatica C360 / IDMC
-          </p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("<div style='height:3.5rem'></div>", unsafe_allow_html=True)
 
         with st.form("login_form"):
             pod_url  = st.text_input(
