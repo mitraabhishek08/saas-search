@@ -24,14 +24,12 @@ CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* ── Background: fixed gradient injected via pseudo-element ──── */
-html {
-  height: 100%;
-}
+/* ── Background: dark navy blue gradient ─────────────────────── */
+html { height: 100%; }
 body {
   min-height: 100vh;
   font-family: 'Inter', sans-serif !important;
-  background: linear-gradient(135deg, #0f0c29 0%, #302b63 55%, #1a1a3e 100%) fixed !important;
+  background: linear-gradient(135deg, #020b18 0%, #051e3e 45%, #0a2a52 100%) fixed !important;
 }
 
 /* ── Strip all Streamlit white wrappers ──────────────────────── */
@@ -57,27 +55,17 @@ section[data-testid="stSidebar"] { display: none !important; }
 /* ── Base typography ─────────────────────────────────────────── */
 html, body, [class*="css"], p, span, label, div {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
-  color: rgba(255,255,255,0.9);
-}
-
-/* ── Glass mixin (reused via custom classes) ─────────────────── */
-.glass {
-  backdrop-filter: blur(16px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-  background: rgba(255,255,255,0.07) !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+  color: rgba(220,235,255,0.9);
 }
 
 /* ── Navbar ──────────────────────────────────────────────────── */
 div[data-testid="stHorizontalBlock"]:first-of-type {
   backdrop-filter: blur(20px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  background: rgba(255,255,255,0.06) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+  background: rgba(5,30,70,0.55) !important;
+  border-bottom: 1px solid rgba(56,165,248,0.18) !important;
   padding: 0 2rem !important;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.35) !important;
 }
 div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] {
   display: flex !important;
@@ -96,9 +84,9 @@ div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"]
 div[data-testid="stHorizontalBlock"]:first-of-type
   > div[data-testid="stColumn"]:last-child
   div[data-testid="stButton"] > button {
-  background: rgba(255,255,255,0.08) !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  color: rgba(255,255,255,0.7) !important;
+  background: rgba(56,165,248,0.1) !important;
+  border: 1px solid rgba(56,165,248,0.3) !important;
+  color: rgba(148,210,255,0.8) !important;
   border-radius: 50% !important;
   width: 34px !important; height: 34px !important;
   min-height: 34px !important; padding: 0 !important;
@@ -109,67 +97,67 @@ div[data-testid="stHorizontalBlock"]:first-of-type
 div[data-testid="stHorizontalBlock"]:first-of-type
   > div[data-testid="stColumn"]:last-child
   div[data-testid="stButton"] > button:hover {
-  background: rgba(129,140,248,0.25) !important;
-  border-color: rgba(129,140,248,0.5) !important;
-  color: #a5b4fc !important;
-  box-shadow: 0 0 16px rgba(129,140,248,0.3) !important;
+  background: rgba(56,165,248,0.22) !important;
+  border-color: rgba(56,165,248,0.6) !important;
+  color: #93c5fd !important;
+  box-shadow: 0 0 16px rgba(56,165,248,0.35) !important;
 }
 
 /* ── Form (login card + search bar) ─────────────────────────── */
 [data-testid="stForm"] {
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-  background: rgba(255,255,255,0.07) !important;
-  border: 1px solid rgba(255,255,255,0.14) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  background: rgba(8,25,60,0.5) !important;
+  border: 1px solid rgba(56,165,248,0.2) !important;
   border-radius: 20px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(56,165,248,0.12) !important;
 }
 
 /* ── Inputs ──────────────────────────────────────────────────── */
 div[data-testid="stTextInput"] > label {
   font-size: 0.78rem !important;
   font-weight: 600 !important;
-  color: rgba(255,255,255,0.65) !important;
+  color: rgba(148,210,255,0.65) !important;
   letter-spacing: 0.3px !important;
   text-transform: uppercase !important;
 }
 div[data-testid="stTextInput"] input {
-  background: rgba(255,255,255,0.08) !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
+  background: rgba(5,25,65,0.6) !important;
+  border: 1px solid rgba(56,165,248,0.25) !important;
   border-radius: 10px !important;
-  color: rgba(255,255,255,0.95) !important;
+  color: rgba(220,235,255,0.95) !important;
   font-size: 0.9rem !important;
   transition: all .2s !important;
 }
 div[data-testid="stTextInput"] input::placeholder {
-  color: rgba(255,255,255,0.3) !important;
+  color: rgba(148,210,255,0.28) !important;
 }
 div[data-testid="stTextInput"] input:focus {
-  background: rgba(255,255,255,0.12) !important;
-  border-color: rgba(129,140,248,0.6) !important;
-  box-shadow: 0 0 0 3px rgba(129,140,248,0.15) !important;
+  background: rgba(5,25,65,0.8) !important;
+  border-color: rgba(56,165,248,0.65) !important;
+  box-shadow: 0 0 0 3px rgba(56,165,248,0.15) !important;
   outline: none !important;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
 div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+  background: linear-gradient(135deg, #1d6fa4, #0ea5e9) !important;
   border: none !important;
   color: #fff !important;
   border-radius: 10px !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
-  box-shadow: 0 0 20px rgba(99,102,241,0.4) !important;
+  box-shadow: 0 0 22px rgba(14,165,233,0.45) !important;
   transition: all .2s !important;
 }
 div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover {
-  box-shadow: 0 0 32px rgba(99,102,241,0.65) !important;
+  box-shadow: 0 0 36px rgba(14,165,233,0.7) !important;
   transform: translateY(-1px) !important;
 }
 div[data-testid="stButton"] > button {
-  background: rgba(255,255,255,0.08) !important;
-  border: 1px solid rgba(255,255,255,0.18) !important;
-  color: rgba(255,255,255,0.85) !important;
+  background: rgba(56,165,248,0.1) !important;
+  border: 1px solid rgba(56,165,248,0.25) !important;
+  color: rgba(148,210,255,0.9) !important;
   border-radius: 10px !important;
   font-weight: 500 !important;
   font-size: 0.87rem !important;
@@ -177,17 +165,17 @@ div[data-testid="stButton"] > button {
   transition: all .2s !important;
 }
 div[data-testid="stButton"] > button:hover {
-  background: rgba(129,140,248,0.2) !important;
-  border-color: rgba(129,140,248,0.45) !important;
-  color: #c4b5fd !important;
-  box-shadow: 0 0 16px rgba(129,140,248,0.25) !important;
+  background: rgba(56,165,248,0.22) !important;
+  border-color: rgba(56,165,248,0.5) !important;
+  color: #7dd3fc !important;
+  box-shadow: 0 0 16px rgba(56,165,248,0.25) !important;
 }
 
 /* ── Expanders (API debug) ───────────────────────────────────── */
 div[data-testid="stExpander"] {
   backdrop-filter: blur(12px) !important;
-  background: rgba(255,255,255,0.05) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
+  background: rgba(5,20,50,0.45) !important;
+  border: 1px solid rgba(56,165,248,0.15) !important;
   border-radius: 12px !important;
   margin-bottom: 8px !important;
   overflow: hidden !important;
@@ -196,17 +184,17 @@ div[data-testid="stExpander"] > details > summary {
   font-size: 0.85rem !important;
   font-weight: 500 !important;
   padding: 0.7rem 1rem !important;
-  color: rgba(255,255,255,0.85) !important;
+  color: rgba(148,210,255,0.85) !important;
 }
 div[data-testid="stExpander"] > details > summary:hover {
-  background: rgba(255,255,255,0.05) !important;
+  background: rgba(56,165,248,0.07) !important;
 }
 
 /* ── Dataframe ───────────────────────────────────────────────── */
 div[data-testid="stDataFrame"] {
-  background: rgba(255,255,255,0.04) !important;
+  background: rgba(5,20,50,0.35) !important;
   border-radius: 12px !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
+  border: 1px solid rgba(56,165,248,0.14) !important;
   overflow: hidden !important;
 }
 
@@ -216,23 +204,23 @@ div[data-testid="stDataFrame"] {
 
 /* ── Alerts ──────────────────────────────────────────────────── */
 div[data-testid="stAlert"] {
-  background: rgba(255,255,255,0.07) !important;
+  background: rgba(5,20,50,0.45) !important;
   border-radius: 10px !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
+  border: 1px solid rgba(56,165,248,0.18) !important;
   backdrop-filter: blur(8px) !important;
-  color: rgba(255,255,255,0.9) !important;
+  color: rgba(220,235,255,0.9) !important;
 }
 
 /* ── Caption / small text ────────────────────────────────────── */
 div[data-testid="stCaptionContainer"] p {
-  color: rgba(255,255,255,0.5) !important;
+  color: rgba(148,210,255,0.45) !important;
 }
 
 /* ── Spinner ─────────────────────────────────────────────────── */
-div[data-testid="stSpinner"] p { color: rgba(255,255,255,0.6) !important; }
+div[data-testid="stSpinner"] p { color: rgba(148,210,255,0.6) !important; }
 
 /* ── Divider ─────────────────────────────────────────────────── */
-hr { border-color: rgba(255,255,255,0.1) !important; }
+hr { border-color: rgba(56,165,248,0.12) !important; }
 </style>
 """
 
@@ -333,19 +321,19 @@ def render_navbar():
     with brand_col:
         st.markdown("""
         <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:.97rem;font-weight:700;color:rgba(255,255,255,.95);
+          <span style="font-size:.97rem;font-weight:700;color:rgba(220,235,255,.95);
                        letter-spacing:-.3px;">MDM Search</span>
-          <span style="background:rgba(129,140,248,.2);border:1px solid rgba(129,140,248,.35);
+          <span style="background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.35);
                        border-radius:20px;padding:2px 10px;font-size:.7rem;font-weight:600;
-                       color:#a5b4fc;">Informatica C360</span>
+                       color:#7dd3fc;">Informatica C360</span>
         </div>
         """, unsafe_allow_html=True)
     with user_col:
         st.markdown(f"""
         <div style="display:flex;justify-content:flex-end;">
-          <span style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+          <span style="background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.28);
                        border-radius:20px;padding:5px 14px;font-size:.82rem;font-weight:500;
-                       color:rgba(255,255,255,.85);white-space:nowrap;
+                       color:rgba(148,210,255,.9);white-space:nowrap;
                        backdrop-filter:blur(8px);">{st.session_state.username}</span>
         </div>
         """, unsafe_allow_html=True)
@@ -384,10 +372,10 @@ def render_results(data):
     st.markdown(f"""
     <div style="display:flex;align-items:center;gap:10px;margin:2rem 0 .75rem;">
       <span style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
-                   color:rgba(255,255,255,.5);">Organizations</span>
-      <span style="background:rgba(129,140,248,.2);border:1px solid rgba(129,140,248,.3);
+                   color:rgba(148,210,255,.5);">Organizations</span>
+      <span style="background:rgba(14,165,233,.15);border:1px solid rgba(14,165,233,.3);
                    border-radius:20px;padding:2px 10px;font-size:.78rem;font-weight:700;
-                   color:#a5b4fc;">{total} found</span>
+                   color:#7dd3fc;">{total} found</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -431,16 +419,16 @@ def render_results(data):
         .set_properties(**{"font-size": "13px", "color": "rgba(255,255,255,0.85)"})
         .set_table_styles([
             {"selector": "th", "props": [
-                ("background", "rgba(129,140,248,0.15)"),
-                ("color", "#a5b4fc"),
+                ("background", "rgba(14,165,233,0.12)"),
+                ("color", "#7dd3fc"),
                 ("font-weight", "700"),
                 ("font-size", "11px"),
                 ("text-transform", "uppercase"),
                 ("letter-spacing", "0.5px"),
-                ("border-bottom", "1px solid rgba(129,140,248,0.25)"),
+                ("border-bottom", "1px solid rgba(14,165,233,0.22)"),
             ]},
-            {"selector": "td", "props": [("border-bottom", "1px solid rgba(255,255,255,0.05)")]},
-            {"selector": "tr:hover td", "props": [("background", "rgba(255,255,255,0.04)")]},
+            {"selector": "td", "props": [("border-bottom", "1px solid rgba(56,165,248,0.07)")]},
+            {"selector": "tr:hover td", "props": [("background", "rgba(14,165,233,0.05)")]},
         ])
     )
     st.dataframe(styled, use_container_width=True, hide_index=True)
