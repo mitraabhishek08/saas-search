@@ -179,6 +179,15 @@ LOGIN_CSS = """
 .stApp {
   background: linear-gradient(145deg, #1c0a00 0%, #7c2d12 45%, #431407 100%) !important;
 }
+/* Strip white backgrounds off every Streamlit wrapper so gradient shows through */
+[data-testid="stAppViewContainer"],
+[data-testid="stMainBlockContainer"],
+[data-testid="stAppViewBlockContainer"],
+[data-testid="stVerticalBlock"],
+div[data-testid="stColumn"],
+.main, .main > div, section.main {
+  background: transparent !important;
+}
 [data-testid="stForm"] {
   background: white !important;
   border-radius: 16px !important;
