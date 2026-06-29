@@ -74,19 +74,42 @@ div[data-testid="stHorizontalBlock"]:first-of-type {
   border-bottom: 1px solid rgba(56,165,248,0.18) !important;
   padding: 0 2rem !important;
   box-shadow: 0 4px 24px rgba(0,0,0,0.35) !important;
+  align-items: center !important;
 }
 div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] {
   display: flex !important;
   align-items: center !important;
+  justify-content: flex-start !important;
   min-height: 58px !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
-div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] > div {
+div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] > div,
+div[data-testid="stHorizontalBlock"]:first-of-type > div[data-testid="stColumn"] > div > div {
+  display: flex !important;
+  align-items: center !important;
   margin-bottom: 0 !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   width: 100% !important;
+}
+
+/* ── Search row: input + button vertically aligned ───────────── */
+[data-testid="stForm"] div[data-testid="stHorizontalBlock"] {
+  align-items: center !important;
+}
+[data-testid="stForm"] div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] {
+  display: flex !important;
+  align-items: center !important;
+}
+[data-testid="stForm"] div[data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] > div {
+  width: 100% !important;
+  margin-bottom: 0 !important;
+}
+[data-testid="stForm"] div[data-testid="stFormSubmitButton"] {
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
 }
 /* Logout icon button */
 div[data-testid="stHorizontalBlock"]:first-of-type
@@ -411,32 +434,35 @@ def render_results(data):
     df = pd.DataFrame(rows)
 
     def _style_status(val):
-        if val == "ACTIVE":   return "background:rgba(74,222,128,.15);color:#4ade80;font-weight:600"
-        if val in ("INACTIVE","DELETED"): return "background:rgba(248,113,113,.15);color:#f87171;font-weight:600"
-        return "color:rgba(255,255,255,.6)"
+        if val == "ACTIVE":   return "background:#dcfce7;color:#166534;font-weight:600"
+        if val in ("INACTIVE","DELETED"): return "background:#fee2e2;color:#991b1b;font-weight:600"
+        return "color:#64748b"
 
     def _style_validation(val):
-        if val == "PASSED": return "background:rgba(74,222,128,.15);color:#4ade80;font-weight:600"
-        if val == "FAILED": return "background:rgba(248,113,113,.15);color:#f87171;font-weight:600"
-        return "color:rgba(255,255,255,.6)"
+        if val == "PASSED": return "background:#dcfce7;color:#166534;font-weight:600"
+        if val == "FAILED": return "background:#fee2e2;color:#991b1b;font-weight:600"
+        return "color:#64748b"
 
     styled = (
         df.style
         .map(_style_status,     subset=["Status"])
         .map(_style_validation, subset=["Validation"])
-        .set_properties(**{"font-size": "13px", "color": "rgba(255,255,255,0.85)"})
+        .set_properties(**{"font-size": "13px", "color": "#1e293b"})
         .set_table_styles([
             {"selector": "th", "props": [
-                ("background", "rgba(14,165,233,0.12)"),
+                ("background", "#0f2a4a"),
                 ("color", "#7dd3fc"),
                 ("font-weight", "700"),
                 ("font-size", "11px"),
                 ("text-transform", "uppercase"),
                 ("letter-spacing", "0.5px"),
-                ("border-bottom", "1px solid rgba(14,165,233,0.22)"),
+                ("border-bottom", "1px solid #1e4a78"),
             ]},
-            {"selector": "td", "props": [("border-bottom", "1px solid rgba(56,165,248,0.07)")]},
-            {"selector": "tr:hover td", "props": [("background", "rgba(14,165,233,0.05)")]},
+            {"selector": "td", "props": [
+                ("border-bottom", "1px solid #e2e8f0"),
+                ("color", "#1e293b"),
+            ]},
+            {"selector": "tr:hover td", "props": [("background", "#f0f7ff")]},
         ])
     )
     st.dataframe(styled, use_container_width=True, hide_index=True)
